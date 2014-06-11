@@ -37,12 +37,13 @@ document(myreport): report
 	acknowledgement: ack.opus
 	
 	% รายการไฟล์เนื้อหา แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
-	chapter(บทนำ): chap1.opus
+	chapter(บทนำ): chapter1.opus
+	chapter(ความรู้พื้นฐานและงานที่เกี่ยวข้อง): chapter2.opus
 
 	% ชื่อไฟล์เอกสารอ้างอิง
 	reference: references.bib
 	
 	% ชื่อไฟล์ภาคผนวก แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
-	appendix(คู่มือการติดตั้งโปรแกรม): chap1.opus
+	%appendix(คู่มือการติดตั้งโปรแกรม): chap1.opus
 
 end.
