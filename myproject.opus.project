@@ -39,11 +39,15 @@ document(myreport): report
 	% รายการไฟล์เนื้อหา แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
 	chapter(บทนำ): chapter1.opus
 	chapter(ความรู้พื้นฐานและงานที่เกี่ยวข้อง): chapter2.opus
+	chapter(การพัฒนา): chapter3.opus
+	chapter(ผลและวิจารณ์): chapter4.opus
+	chapter(สรุป): chapter5.opus
 
 	% ชื่อไฟล์เอกสารอ้างอิง
 	reference: references.bib
 	
 	% ชื่อไฟล์ภาคผนวก แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
-	%appendix(คู่มือการติดตั้งโปรแกรม): chap1.opus
+	%appendix(คู่มือการติดตั้งโปรแกรม): appendixA.opus
+	%appendix(คู่มือการใช้งานโปรแกรม): appendixB.opus
 
 end.
