@@ -47,28 +47,28 @@ class ControllerParser:
         for s in self.command:
             result = result + s + ' '
         return result
-        
+
 class CodeWriter:
     def __init__(self, filename, information):
         self.f = open(filename,'w')
         self.info = information
         self.translator = TexTranslator(information)
-        
+
     def close(self):
         self.f.close()
-        
+
     def write(self, s):
         self.f.write(self.thaicode(s))
-        
+
     def writeLine(self, s):
         self.f.write(self.thaicode(s) + '\n')
-    
+
     def translateAndWrite(self, s):
         self.write(self.translator.translate(s))
-    
+
     def translateAndWriteLine(self, s):
         self.writeLine(self.translator.translate(s))
-        
+
     def thaicode(self,s):
         result = ''
         thstart=[]
@@ -80,22 +80,21 @@ class CodeWriter:
                 if state=='en':
                     thstart.append(i)
                     state='th'
-    	    else:
-        	if state=='th':
-                    thstop.append(i)
-                    state='en'
+            elif state=='th':
+                thstop.append(i)
+                state='en'
         if state=='th':
             thstop.append(len(s))
         laststop=0
         for i in range(len(thstart)):
             result = result + s[laststop:thstart[i]]
-            result = result + '{\\thi '      
+            result = result + '{\\thi '
             result = result + s[thstart[i]:thstop[i]]
             result = result + '}'
             laststop = thstop[i]
         result = result + s[laststop:]
         return result
-    
+
     def writeReport(self):
         self.writeHeader()
         self.writeReportMainCover()
@@ -109,14 +108,14 @@ class CodeWriter:
         self.writeReferences()
         self.writeAppendices()
         self.writeEnding()
-    
+
     def writeProposal(self):
         self.writeHeader()
         self.writeProposalCover()
         self.writeChapters()
         self.writeReferences()
         self.writeEnding()
-        
+
     def writeHeader(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
@@ -124,9 +123,9 @@ class CodeWriter:
         self.writeLine('%%        Project ' + information['TYPE'] + ': ' + information['DOCUMENT'])
         self.writeLine('%%')
         self.writeLine('%%        Computer Engineering Project')
-        self.writeLine('%%        Department of Computer Engineering')    
-        self.writeLine('%%        Faculty of Engineering at Siracha')  
-        self.writeLine('%%        Kasetsart University, Siracha Campus')  
+        self.writeLine('%%        Department of Computer Engineering')
+        self.writeLine('%%        Faculty of Engineering at Siracha')
+        self.writeLine('%%        Kasetsart University, Siracha Campus')
         self.writeLine('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
         self.writeLine('\\documentclass[12pt,a4paper,oneside]{book}')
         self.writeLine('\\usepackage{fontspec}')
@@ -173,7 +172,7 @@ class CodeWriter:
         self.writeLine('{\\fontsize{14pt}{16pt}\\selectfont') # ขนาดตัวอักษรปรกติสำหรับ Report
 
         self.writeLine('')
-    
+
     def writeNote(self, options):
         information = self.info
         if '-h' not in options:
@@ -182,9 +181,9 @@ class CodeWriter:
             self.writeLine('%%        Project Note: ' + information['PROJECT'])
             self.writeLine('%%')
             self.writeLine('%%        Computer Engineering Project')
-            self.writeLine('%%        Department of Computer Engineering')    
-            self.writeLine('%%        Faculty of Engineering at Siracha')  
-            self.writeLine('%%        Kasetsart University, Siracha Campus')  
+            self.writeLine('%%        Department of Computer Engineering')
+            self.writeLine('%%        Faculty of Engineering at Siracha')
+            self.writeLine('%%        Kasetsart University, Siracha Campus')
             self.writeLine('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
             self.writeLine('\\documentclass[12pt,a4paper,oneside]{article}')
             self.writeLine('\\usepackage{fontspec}')
@@ -218,7 +217,7 @@ class CodeWriter:
             self.writeLine('%%%%%%%%%%%%%%%%%%% Document Start %%%%%%%%%%%%%%%%%%%%%')
             self.writeLine('\\begin{document}')
             self.writeLine('\\pagestyle{myheadings}')
-            self.writeLine('\\pagenumbering{arabic}')      
+            self.writeLine('\\pagenumbering{arabic}')
             self.writeLine('{\\fontsize{12pt}{13pt}\\selectfont') # ขนาดตัวอักษรปรกติสำหรับ Note
             self.writeLine('')
 
@@ -232,7 +231,7 @@ class CodeWriter:
             self.writeLine('\n')
             self.writeLine('}')
             self.writeLine('\\end{document}')
-        
+
     def writeProposalCover(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%%%%% Cover %%%%%%%%%%%%%%%%%%%%%%%%%')
@@ -264,7 +263,7 @@ class CodeWriter:
         self.writeLine('}')
         self.writeLine('\\end{center}')
         self.writeLine('')
-        
+
     def writeReportMainCover(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%% Main Cover %%%%%%%%%%%%%%%%%%%%%%%')
@@ -288,7 +287,7 @@ class CodeWriter:
         self.writeLine('พ.ศ. \\thisYear}\\\\')
         self.writeLine('\\end{center}')
         self.writeLine('')
-    
+
     def writeReportInsideCover(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%% Inside Cover %%%%%%%%%%%%%%%%%%%%%%')
@@ -318,7 +317,7 @@ class CodeWriter:
         self.writeLine('พ.ศ. \\thisYear')
         self.writeLine('\\end{center}')
         self.writeLine('')
-   
+
     def writeApprovalForm(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%% Approval Form %%%%%%%%%%%%%%%%%%%%%')
@@ -364,7 +363,7 @@ class CodeWriter:
         self.writeLine('\\end{tabularx}')
         self.writeLine('\\end{center}')
         self.writeLine('')
-        
+
     def writeAbstractTH(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%% Abstract TH %%%%%%%%%%%%%%%%%%%%%%')
@@ -394,8 +393,8 @@ class CodeWriter:
             s = f.readline()
         f.close()
         self.writeLine('\n')
-        
-              
+
+
     def writeAbstractEN(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%% Abstract EN %%%%%%%%%%%%%%%%%%%%%%')
@@ -425,7 +424,7 @@ class CodeWriter:
             s = f.readline()
         f.close()
         self.writeLine('\n')
-        
+
     def writeAcknowledgement(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%% Acknowledgement %%%%%%%%%%%%%%%%%%%%%%')
@@ -447,7 +446,7 @@ class CodeWriter:
         self.writeLine('\\thisYear')
         self.writeLine('\\end{flushright}')
         self.writeLine('')
-        
+
     def writeTableOfContents(self):
         self.writeLine('%%%%%%%%%%%%%%%%%% Table of Contents %%%%%%%%%%%%%%%%%%%')
         self.writeLine('\\newpage')
@@ -456,7 +455,7 @@ class CodeWriter:
         self.writeLine('\\listoftables')
         self.writeLine('\\listoffigures')
         self.writeLine('')
-        
+
     def writeChapters(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%%% Contents %%%%%%%%%%%%%%%%%%%%%%%%')
@@ -464,7 +463,7 @@ class CodeWriter:
         self.writeLine('\\pagenumbering{arabic}')
         for chapter in information['CHAPTER']:
             self.writeChapter(chapter)
-            
+
     def writeChapter(self, chapter):
         self.writeLine('%%%%%%%%%%%%%%%%% ' + chapter[0] + ' %%%%%%%%%%%%%%%%%%%')
         self.writeLine('\\chapter{' + chapter[0] + '}')
@@ -476,7 +475,7 @@ class CodeWriter:
             s = f.readline()
         f.close()
         self.writeLine('\n')
-    
+
     def writeReferences(self):
         information = self.info
         bibfile = open(information['REFERENCE'], 'r')
@@ -492,14 +491,14 @@ class CodeWriter:
         self.writeLine('\\bibliography{' + information['DOCUMENT'] + '_' + information['REFERENCE'].split('.')[0] + '}')
         self.writeLine('')
 
-                
+
     def writeAppendices(self):
         information = self.info
         self.writeLine('%%%%%%%%%%%%%%%%%%%%% Appendices %%%%%%%%%%%%%%%%%%%%%%%')
         self.writeLine('\\appendix')
         for appendix in information['APPENDIX']:
             self.writeChapter(appendix)
-        
+
     def writeEnding(self):
         self.writeLine('%%%%%%%%%%%%%%%%%%%% Document Ending %%%%%%%%%%%%%%%%%%%%%')
         self.writeLine('}')
@@ -509,7 +508,7 @@ class LatexCaller:
     def __init__(self, projectName, bibFile):
         self.projectName = projectName
         self.bibFile = bibFile
-        
+
     def callXelatex(self, options):
         if '-t' not in options:
             os.system('xelatex ' + self.projectName + '.tex')
@@ -521,19 +520,23 @@ class LatexCaller:
         supportingFiles = ['log', 'lot', 'lof', 'toc', 'tex', 'aux', 'bbl', 'blg', 'bib']
         for f in supportingFiles:
             if f not in options:
-                if f == 'bib':
-                    os.system('rm '+ self.projectName + '_' + self.bibFile)
-                else:
-                    os.system('rm ' + self.projectName + '.' + f)
-  
+                try:
+                    if f == 'bib':
+                        os.remove(self.projectName + '_' + self.bibFile)
+                    else:
+                        os.remove(self.projectName + '.' + f)
+                except Exception as e:
+                    continue
+                    # Ignore exception and continue
+
 class TexTranslator:
     def __init__(self, information):
         self.state = ['text']
         self.info = information
-        
+
     def reset(self):
         self.state = ['text']
-    
+
     def executeCommand(self):
         result = ''
         self.command = self.command.strip()
@@ -543,7 +546,7 @@ class TexTranslator:
                 self.state.pop()
             else:
                 result = '[[' + self.command + ']]'
-        
+
         else:
             if self.command.startswith('title'):
                 section = self.command[5:].strip()
@@ -563,16 +566,16 @@ class TexTranslator:
                         arg = arg[6:].strip()
                         if arg.startswith('='):
                             author = translator.translate(arg[1:].strip())
-                
+
                 result =  '\\title{' + title + '}\n'
                 if not (date == ''):
                     result = result + '\\date{' + date + '}\n'
                 if not (author == ''):
                     result = result + '\\author{' + author + '}\n'
                 result = result + '\\maketitle\n'
-                
-                
-                    
+
+
+
             elif self.command.startswith('section'):
                 section = self.command[7:].strip()
                 label = ''
@@ -643,14 +646,14 @@ class TexTranslator:
                 label = ''
                 if section[0] == '(':
                     endLabel = section.find(')')
-                    label = section[1:endLabel]           
+                    label = section[1:endLabel]
                     result = result + '\\ref{' + label + '}'
             elif self.command.startswith('cite'):
                 section = self.command[4:].strip()
                 label = ''
                 if section[0] == '(':
                     endLabel = section.find(')')
-                    label = section[1:endLabel]           
+                    label = section[1:endLabel]
                     result = result + '\\cite{' + label + '}'
             elif self.command.startswith('image'):
                 args = self.command.split('|')
@@ -684,7 +687,7 @@ class TexTranslator:
                     result = result + '\\label{' + label + '}\n'
                 if not (caption == ''):
                     result = result + '\\end{figure}\n'
-            
+
             elif self.command.startswith('bibliography'):
                 section = self.command[12:].strip()
                 if section[0] == ':':
@@ -696,16 +699,16 @@ class TexTranslator:
                     while s:
                         writer.writeLine(s)
                         s = bibfile.readline()
-                    result = '%%%%%%%%%%%%%%%%%%%%% References %%%%%%%%%%%%%%%%%%%%%%%\n'      
+                    result = '%%%%%%%%%%%%%%%%%%%%% References %%%%%%%%%%%%%%%%%%%%%%%\n'
                     result = result + '\\bibliographystyle{plain}\n'
                     result = result + '\\bibliography{' + information['PROJECT'] + '_' + 'reference' + '}\n'
-                    
-                
+
+
             elif self.command == 'name-th':
                 result = self.info['NAMETH']
             elif self.command == 'name-en':
                 result = self.info['NAMEEN']
-            
+
             elif self.command.startswith('figure'):
                 section = self.command[6:].strip()
                 label = ''
@@ -718,7 +721,7 @@ class TexTranslator:
                     caption = section[1:]
                 result = '\\begin{figure}\n\\centering\n'
                 self.state.append('figure|' + label + '|' + caption)
-            
+
             elif self.command == 'math':
                 result = '\\['
                 self.state.append('math')
@@ -793,7 +796,7 @@ class TexTranslator:
                 if not (label == ''):
                     result = result + '\n\\label{' + label + '}'
                 self.state.append('prob')
-            
+
             elif self.command.startswith('code'):
                 args = self.command.split('|')
                 mathEnable = False
@@ -813,7 +816,7 @@ class TexTranslator:
                         arg = arg[7:].strip()
                         if arg.startswith('=') and arg[1:].strip() == 'true':
                             numbers = True
-                                                
+
                 result = '\\begin{Verbatim}[fontfamily=tt'
                 if frame:
                     result = result + ', frame=single'
@@ -823,7 +826,7 @@ class TexTranslator:
                     result = result + ', commandchars=\\\\\\{\\}, codes={\\catcode`$=3\\catcode`^=7}'
                 result = result + ']'
                 self.state.append('code')
-            
+
             elif self.command.startswith('table'):
                 section = self.command[5:]
                 format = ''
@@ -841,7 +844,7 @@ class TexTranslator:
                         section = section[endLabel+1:].strip()
                     if section[0] == ':':
                         caption = section[1:]
-                
+
                 if not(caption == ''):
                     result = '\\begin{table}\n\\centering\n'
                     result = result + '\\caption{' + caption + '}\n'
@@ -852,14 +855,14 @@ class TexTranslator:
                     self.state.append('table')
                 else:
                     self.state.append('tabular')
-            
+
             elif self.command == 'list':
                 result = '\\begin{enumerate}'
                 self.state.append('list')
             elif self.command == 'ulist':
                 result = '\\begin{itemize}'
                 self.state.append('ulist')
-            
+
             elif self.command == 'end':
                 if self.state[-1].startswith('figure'):
                     args = self.state[-1].split('|')
@@ -871,19 +874,19 @@ class TexTranslator:
                         result = result + '\\label{' + label +'}\n'
                     result = result + '\\end{figure}\n'
                     self.state.pop()
-                
+
                 elif self.state[-1] == 'table':
                     result = '\\end{tabular}\n\\end{table}'
                     self.state.pop()
-                
+
                 elif self.state[-1] == 'tabular':
                     result = '\\end{tabular}'
                     self.state.pop()
-                
+
                 elif self.state[-1] == 'list':
                     result = '\\end{enumerate}'
                     self.state.pop()
-                
+
                 elif self.state[-1] == 'ulist':
                     result = '\\end{itemize}'
                     self.state.pop()
@@ -915,11 +918,11 @@ class TexTranslator:
                 elif self.state[-1] == 'prob':
                     result = '\\end{prob}'
                     self.state.pop()
-                    
+
         return result
-                
-        
-        
+
+
+
     def translate(self, s):
         opusSpecialCharactors = ['*', '`', ':']
         result = ''
@@ -929,7 +932,7 @@ class TexTranslator:
                 c = '``'
             elif c == "'" and (i==0 or s[i-1] == ' '):
                 c = '`'
-                
+
             if self.state[-1] == 'backslash':
                 if s[i] in opusSpecialCharactors:
                     result = result + c
@@ -938,11 +941,11 @@ class TexTranslator:
                 self.state.pop()
                 if s[i] == '[':
                     self.state.append('math')
-                
+
             elif self.state[-1] == 'comment':
                 if s[i] == '\n':
                     self.state.pop()
-            
+
             elif self.state[-1] == 'openSquareBracket':
                 if s[i] == '[':
                     self.state.append('command')
@@ -950,7 +953,7 @@ class TexTranslator:
                 else:
                     self.state.pop()
                     result = result + '[' + c
-            
+
             elif self.state[-1] == 'command':
                 if s[i] == ']':
                     self.state.append('endCommand')
@@ -959,14 +962,14 @@ class TexTranslator:
                     self.command = self.command + c
                 else:
                     self.command = self.command + c
-            
+
             elif self.state[-1] == 'openSquareBracketInCommand':
                 if s[i] == '[':
                     self.state.append('openSquareBracketInCommand')
                 elif s[i] == ']':
                     self.state.pop()
                 self.command = self.command + c
-            
+
             elif self.state[-1] == 'endCommand':
                 if s[i] == ']':
                     self.state.pop()
@@ -975,8 +978,8 @@ class TexTranslator:
                     result = result + self.executeCommand()
                 else:
                     self.state.pop()
-                    self.command = self.command + ']' + c                   
-                    
+                    self.command = self.command + ']' + c
+
             elif self.state[-1] in ['text', 'definition', 'example','theorem', 'lemma','proof','prob']:
                 if s[i] == '\\':
                     self.state.append('backslash')
@@ -1004,7 +1007,7 @@ class TexTranslator:
                     self.state.append('openSquareBracket')
                 else:
                     result = result + c
-            
+
             elif self.state[-1] in ['list', 'ulist']:
                 if s[i] == '\\':
                     self.state.append('backslash')
@@ -1034,7 +1037,7 @@ class TexTranslator:
                     result = result + '\\item '
                 else:
                     result = result + c
-            
+
             elif self.state[-1] in ['table', 'tabular']:
                 if s[i] == '\\':
                     self.state.append('backslash')
@@ -1062,7 +1065,7 @@ class TexTranslator:
                     self.state.append('openSquareBracket')
                 else:
                     result = result + c
-            
+
             elif self.state[-1].startswith('figure'):
                 if s[i] == '\\':
                     self.state.append('backslash')
@@ -1090,7 +1093,7 @@ class TexTranslator:
                     self.state.append('openSquareBracket')
                 else:
                     result = result + c
-            
+
             elif self.state[-1] == 'code':
                 if s.find('[[end]]') == i:
                     result = result + '\\end{Verbatim}'
@@ -1101,7 +1104,7 @@ class TexTranslator:
                 if s.find('[[end]]') == i-6:
                     self.state.pop()
                     self.state.pop()
-            
+
             elif self.state[-1] == 'bold':
                 if s[i] == '\\':
                     self.state.append('backslash')
@@ -1124,7 +1127,7 @@ class TexTranslator:
                     self.state.append('inlinemath')
                 else:
                     result = result + c
-                    
+
             elif self.state[-1] == 'emph':
                 if s[i] == '\\':
                     self.state.append('backslash')
@@ -1136,7 +1139,7 @@ class TexTranslator:
                         result = result + c
                 elif s[i] == '_':
                     result = result + '}'
-                    self.state.pop()  
+                    self.state.pop()
                 elif s[i] == '%':
                     self.state.append('comment')
                 elif s[i] == '`':
@@ -1147,14 +1150,14 @@ class TexTranslator:
                     self.state.append('inlinemath')
                 else:
                     result = result + c
-            
+
             elif self.state[-1] == 'inlinecode':
                 if s[i] == '`':
                     result = result + '`}'
                     self.state.pop()
                 else:
                     result = result + s[i]
-            
+
             elif self.state[-1] == 'inlinemath':
                 if s[i] == '\\':
                     self.state.append('inlinemathbackslash')
@@ -1163,11 +1166,11 @@ class TexTranslator:
                     self.state.pop()
                 else:
                     result = result + c
-            
+
             elif self.state[-1] == 'inlinemathbackslash':
                 result = result + '\\' + c
                 self.state.pop()
-            
+
             elif self.state[-1] in ['math','eq']:
                 if s[i] == '\\':
                     self.state.append('mathbackslash')
@@ -1175,23 +1178,23 @@ class TexTranslator:
                     self.state.append('openSquareBracket')
                 else:
                     result = result + c
-            
+
             elif self.state[-1] == 'mathbackslash':
                 result = result + '\\' + c
                 self.state.pop()
-                
+
                 if s[i] == ']':
                     self.state.pop()
-            
+
         return result
-            
+
 
 source = sys.argv[1]
 options = []
 if len(sys.argv)>2:
     options = sys.argv[2:]
 if source.endswith('.opus.project'):
-    
+
     parser = ControllerParser(source)
 
     information = {}
@@ -1214,12 +1217,12 @@ if source.endswith('.opus.project'):
                 information['CHAPTER'] = []
                 information['APPENDIX'] = []
                 inADocument = True
-                
-        elif command.startswith('end.'):       
+
+        elif command.startswith('end.'):
             if inADocument:
                 outputfile = information['DOCUMENT'] + '.tex'
                 codeWriter = CodeWriter(outputfile, information)
-    
+
                 if information['TYPE']=='report':
                     codeWriter.writeReport()
                 elif information['TYPE']=='proposal':
@@ -1228,7 +1231,7 @@ if source.endswith('.opus.project'):
                 inADocument = False
                 command = LatexCaller(information['DOCUMENT'], information['REFERENCE'])
                 command.callXelatex(options)
-            
+
         elif command.startswith('name-th:'):
             if inADocument:
                 information['NAMETH'] = command.replace('name-th:','').replace('\\:',':').strip()
@@ -1265,19 +1268,19 @@ if source.endswith('.opus.project'):
         elif command.startswith('headdepartment-en:'):
             if inADocument:
                 information['HEADDEPARTMENTEN'] = command.replace('headdepartment-en:','').replace('\\:',':').strip()
-            
+
         elif command.startswith('abstract-th:'):
             if inADocument:
-                information['ABSTRACTTH'] = command.replace('abstract-th:','').replace('\\:',':').strip()   
+                information['ABSTRACTTH'] = command.replace('abstract-th:','').replace('\\:',':').strip()
         elif command.startswith('abstract-en:'):
             if inADocument:
-                information['ABSTRACTEN'] = command.replace('abstract-en:','').replace('\\:',':').strip() 
+                information['ABSTRACTEN'] = command.replace('abstract-en:','').replace('\\:',':').strip()
         elif command.startswith('acknowledgement:'):
             if inADocument:
-                information['ACKNOWLEDGEMENT'] = command.replace('acknowledgement:','').replace('\\:',':').strip()  
+                information['ACKNOWLEDGEMENT'] = command.replace('acknowledgement:','').replace('\\:',':').strip()
         elif command.startswith('reference:'):
             if inADocument:
-                information['REFERENCE'] = command.replace('reference:','').replace('\\:',':').strip()  
+                information['REFERENCE'] = command.replace('reference:','').replace('\\:',':').strip()
         elif command.startswith('chapter('):
             if inADocument:
                 chaptername = command.replace('chapter(', '').replace(')', '').split(':')[0].strip()
@@ -1288,9 +1291,9 @@ if source.endswith('.opus.project'):
                 appendixname = command.replace('appendix(', '').replace(')', '').split(':')[0].strip()
                 appendixfile = command.replace('appendix(', '').replace(')', '').split(':')[1].strip()
                 information['APPENDIX'].append((appendixname, appendixfile))
-    
+
     parser.close()
-    
+
 elif source.endswith('.opus'):
     projectname = source[:-5]
     outputfile = projectname + '.tex'
