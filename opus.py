@@ -1,23 +1,29 @@
 # -*- coding: utf-8 -*-
 # OPUS Document Generator for Computer Engineering Project
 # Department of Computer Engineering
-# Faculty of Engineering at Siracha
-# Kasetsart University, Siracha Campus.
+# Faculty of Engineering at Sri Racha
+# Kasetsart University, Sri Racha Campus.
 #
 # Licensing Information:
-# The OPUS project was developed by Vacharapat Mettanant
-# Started in 2013
+# The OPUS project was started in 2013
+# Developed by
+#    Vacharapat Mettanant (2013)
+# Maintainance by
+#    Sirisak Lueangsaksri (2014-2015)
 
 
 import datetime
 import sys
 import os
 
+
 class ControllerParser:
     def __init__(self, filename):
         self.f = open(filename, "r")
+
     def close(self):
         self.f.close()
+
     def hasMoreCommand(self):
         while True:
             self.command = self.f.readline()
@@ -39,11 +45,13 @@ class ControllerParser:
                 if commentid >= 0:
                     self.command = self.command[:commentid]
                 self.command = self.command.strip()
-                if len(self.command)>0:
+                if len(self.command) > 0:
                     self.command = self.command.split()
                     return True
+
     def commandString(self):
-    	return " ".join(self.command) + " "
+        return " ".join(self.command) + " "
+
 
 class CodeWriter:
     def __init__(self, filename, information):
@@ -66,7 +74,7 @@ class CodeWriter:
     def translateAndWriteLine(self, s):
         self.writeLine(self.translator.translate(s))
 
-    def thaicode(self,s):
+    def thaicode(self, s):
         result = ""
         thstart = []
         thstop = []
@@ -82,7 +90,7 @@ class CodeWriter:
                 state = "en"
         if state == "th":
             thstop.append(len(s))
-        laststop=0
+        laststop = 0
         for i in range(len(thstart)):
             result += s[laststop:thstart[i]]
             result += "{\\thi "
@@ -137,6 +145,7 @@ class CodeWriter:
         self.writeLine("\\usepackage{titlesec}")
         self.writeLine("\\usepackage{fancyvrb}")
         self.writeLine("\\usepackage{amsmath}")
+        self.writeLine("\\usepackage{url}")
         self.writeLine("\\usepackage[font=large, labelfont=bf]{caption}")
         self.writeLine("\\titleformat{\\chapter}[display]{\\Huge\\bfseries\\centering}{\\chaptertitlename\\ \\thechapter}{20pt}{}")
         self.writeLine("")
@@ -169,7 +178,7 @@ class CodeWriter:
         self.writeLine("\\begin{document}")
         self.writeLine("\\pagestyle{myheadings}")
         self.writeLine("\\pagenumbering{gobble}")
-        self.writeLine("{\\fontsize{14pt}{16pt}\\selectfont") # ขนาดตัวอักษรปรกติสำหรับ Report
+        self.writeLine("{\\fontsize{14pt}{16pt}\\selectfont")  # ขนาดตัวอักษรปรกติสำหรับ Report
 
         self.writeLine("")
 
@@ -218,7 +227,7 @@ class CodeWriter:
             self.writeLine("\\begin{document}")
             self.writeLine("\\pagestyle{myheadings}")
             self.writeLine("\\pagenumbering{arabic}")
-            self.writeLine("{\\fontsize{12pt}{13pt}\\selectfont") # ขนาดตัวอักษรปรกติสำหรับ Note
+            self.writeLine("{\\fontsize{12pt}{13pt}\\selectfont")  # ขนาดตัวอักษรปรกติสำหรับ Note
             self.writeLine("")
 
         f = open(self.info["SOURCE"], "r")
@@ -347,11 +356,11 @@ class CodeWriter:
         self.writeLine("\\textbf ได้รับพิจารณาเห็นชอบโดย & \\\\")
         self.writeLine("\\\\")
         self.writeLine("อาจารย์ที่ปรึกษาโครงงานหลัก & \\dotfill\\ \\\\")
-        self.writeLine("& \\centerline{(อาจารย์" + information["ADVISORTH"].split(",")[0] +")} \\\\")
+        self.writeLine("& \\centerline{(อาจารย์" + information["ADVISORTH"].split(",")[0] + ")} \\\\")
         self.writeLine("กรรมการโครงงานหลัก & \\dotfill\\ \\\\")
-        self.writeLine("& \\centerline{(อาจารย์" + information["COMMITTEE1TH"] +")} \\\\")
+        self.writeLine("& \\centerline{(อาจารย์" + information["COMMITTEE1TH"] + ")} \\\\")
         self.writeLine("กรรมการโครงงานรอง & \\dotfill\\ \\\\")
-        self.writeLine("& \\centerline{(อาจารย์" + information["COMMITTEE2TH"] +")} \\\\")
+        self.writeLine("& \\centerline{(อาจารย์" + information["COMMITTEE2TH"] + ")} \\\\")
         self.writeLine("\\end{tabularx}")
         if not proposal:
             self.writeLine("")
@@ -360,7 +369,7 @@ class CodeWriter:
             self.writeLine("& \\textbf{มหาวิทยาลัยเกษตรศาสตร์ วิทยาเขตศรีราชา รับรองแล้ว}\\\\")
             self.writeLine("& \\\\")
             self.writeLine("& \\dotfill\\ \\\\")
-            self.writeLine("& (อาจารย์" + information["HEADDEPARTMENTTH"] +") \\\\")
+            self.writeLine("& (อาจารย์" + information["HEADDEPARTMENTTH"] + ") \\\\")
             self.writeLine("& หัวหน้าภาควิชาวิศวกรรมคอมพิวเตอร์ \\\\")
             self.writeLine("& \\\\")
             self.writeLine("& วันที่ \\dotfill\\ \\\\")
@@ -397,7 +406,6 @@ class CodeWriter:
             s = f.readline()
         f.close()
         self.writeLine("\n")
-
 
     def writeAbstractEN(self):
         information = self.info
@@ -499,7 +507,6 @@ class CodeWriter:
         self.writeLine("\\bibliography{" + information["DOCUMENT"] + "_" + information["REFERENCE"].split(".")[0] + "}")
         self.writeLine("")
 
-
     def writeAppendices(self):
         information = self.info
         self.writeLine("%%%%%%%%%%%%%%%%%%%%% Appendices %%%%%%%%%%%%%%%%%%%%%%%")
@@ -511,6 +518,7 @@ class CodeWriter:
         self.writeLine("%%%%%%%%%%%%%%%%%%%% Document Ending %%%%%%%%%%%%%%%%%%%%%")
         self.writeLine("}")
         self.writeLine("\\end{document}")
+
 
 class LatexCaller:
     def __init__(self, projectName, bibFile):
@@ -533,9 +541,10 @@ class LatexCaller:
                         os.remove(self.projectName + "_" + self.bibFile)
                     else:
                         os.remove(self.projectName + "." + f)
-                except Exception as e:
-                    continue
+                except Exception:
                     # Ignore exception and continue
+                    continue
+
 
 class TexTranslator:
     def __init__(self, information):
@@ -554,7 +563,6 @@ class TexTranslator:
                 self.state.pop()
             else:
                 result = "[[" + self.command + "]]"
-
         else:
             if self.command.startswith("title"):
                 section = self.command[5:].strip()
@@ -574,16 +582,12 @@ class TexTranslator:
                         arg = arg[6:].strip()
                         if arg.startswith("="):
                             author = translator.translate(arg[1:].strip())
-
-                result =  "\\title{" + title + "}\n"
+                result = "\\title{" + title + "}\n"
                 if date != "":
                     result += "\\date{" + date + "}\n"
                 if author != "":
                     result += "\\author{" + author + "}\n"
                 result += "\\maketitle\n"
-
-
-
             elif self.command.startswith("section"):
                 section = self.command[7:].strip()
                 label = ""
@@ -692,9 +696,9 @@ class TexTranslator:
                         if section[0] == "=":
                             floatStyle = section[1:]
                 if floatStyle.lower() == "none" or floatStyle == "":
-                	floatStyle = ""
+                    floatStyle = ""
                 else:
-                	floatStyle = "[" + floatStyle + "]"
+                    floatStyle = "[" + floatStyle + "]"
                 if caption != "":
                     result = "\\begin{figure}" + floatStyle + "\n\\centering\n"
                 result += "\\includegraphics[width=" + width + "\\textwidth]{" + filename + "}\n"
@@ -704,7 +708,6 @@ class TexTranslator:
                     result += "\\label{" + label + "}\n"
                 if caption != "":
                     result += "\\end{figure}\n"
-
             elif self.command.startswith("bibliography"):
                 section = self.command[12:].strip()
                 if section[0] == ":":
@@ -719,13 +722,10 @@ class TexTranslator:
                     result = "%%%%%%%%%%%%%%%%%%%%% References %%%%%%%%%%%%%%%%%%%%%%%\n"
                     result += "\\bibliographystyle{plain}\n"
                     result += "\\bibliography{" + information["PROJECT"] + "_" + "reference" + "}\n"
-
-
             elif self.command == "name-th":
                 result = self.info["NAMETH"]
             elif self.command == "name-en":
                 result = self.info["NAMEEN"]
-
             elif self.command.startswith("figure"):
                 section = self.command[6:].strip()
                 label = ""
@@ -738,26 +738,23 @@ class TexTranslator:
                     caption = section[1:]
                 result = "\\begin{figure}\n\\centering\n"
                 self.state.append("figure|" + label + "|" + caption)
-
             elif self.command == "math":
                 result = "\\["
                 self.state.append("math")
-
             elif self.command.startswith("definition"):
                 section = self.command[10:].strip()
                 label = ""
-                if len(section)>0 and section[0] == "(":
+                if len(section) > 0 and section[0] == "(":
                     endLabel = section.find(")")
                     label = section[1:endLabel]
                 result = "\\begin{definition}"
                 if label != "":
                     result += "\n\\label{" + label + "}"
                 self.state.append("definition")
-
             elif self.command.startswith("example"):
                 section = self.command[7:].strip()
                 label = ""
-                if len(section)>0 and section[0] == "(":
+                if len(section) > 0 and section[0] == "(":
                     endLabel = section.find(")")
                     label = section[1:endLabel]
                 result = "\\begin{example}"
@@ -765,55 +762,49 @@ class TexTranslator:
                     result += "\n\\label{" + label + "}"
                 result += "\n\\smartqed"
                 self.state.append("example")
-
             elif self.command.startswith("theorem"):
                 section = self.command[7:].strip()
                 label = ""
-                if len(section)>0 and section[0] == "(":
+                if len(section) > 0 and section[0] == "(":
                     endLabel = section.find(")")
                     label = section[1:endLabel]
                 result = "\\begin{theorem}"
                 if label != "":
                     result += "\n\\label{" + label + "}"
                 self.state.append("theorem")
-
             elif self.command.startswith("lemma"):
                 section = self.command[5:].strip()
                 label = ""
-                if len(section)>0 and section[0] == "(":
+                if len(section) > 0 and section[0] == "(":
                     endLabel = section.find(")")
                     label = section[1:endLabel]
                 result = "\\begin{lemma}"
                 if label != "":
                     result += "\n\\label{" + label + "}"
                 self.state.append("lemma")
-
             elif self.command == "proof":
                 result = "\\begin{proof}\n\\smartqed"
                 self.state.append("proof")
-
             elif self.command.startswith("eq"):
                 section = self.command[2:].strip()
                 label = ""
-                if len(section)>0 and section[0] == "(":
+                if len(section) > 0 and section[0] == "(":
                     endLabel = section.find(")")
                     label = section[1:endLabel]
                 result = "\\begin{equation}"
                 if label != "":
                     result += "\n\\label{" + label + "}"
                 self.state.append("eq")
-
             elif self.command.startswith("prob"):
                 section = self.command[4:].strip()
                 label = ""
-                if len(section)>0 and section[0] == "(":
+                if len(section) > 0 and section[0] == "(":
                     endLabel = section.find(")")
                     label = section[1:endLabel]
                 result = "\\begin{prob}"
                 if label != "":
                     result += "\n\\label{" + label + "}"
                 self.state.append("prob")
-
             elif self.command.startswith("code"):
                 args = self.command.split("|")
                 mathEnable = False
@@ -833,7 +824,6 @@ class TexTranslator:
                         arg = arg[7:].strip()
                         if arg.startswith("=") and arg[1:].strip() == "true":
                             numbers = True
-
                 result = "\\begin{Verbatim}[fontfamily=tt"
                 if frame:
                     result += ", frame=single"
@@ -843,7 +833,6 @@ class TexTranslator:
                     result += ", commandchars=\\\\\\{\\}, codes={\\catcode`$=3\\catcode`^=7}"
                 result += "]"
                 self.state.append("code")
-
             elif self.command.startswith("table"):
                 section = self.command[5:]
                 format = ""
@@ -852,16 +841,15 @@ class TexTranslator:
                 if section[0] == "[":
                     endFormat = section.find("]")
                     format = section[1:endFormat]
-                    if len(section)>endFormat:
+                    if len(section) > endFormat:
                         section = section[endFormat+1:].strip()
-                if len(section)>0:
+                if len(section) > 0:
                     if section[0] == "(":
                         endLabel = section.find(")")
                         label = section[1:endLabel]
                         section = section[endLabel+1:].strip()
                     if section[0] == ":":
                         caption = section[1:]
-
                 if not(caption == ""):
                     result = "\\begin{table}\n\\centering\n"
                     result += "\\caption{" + caption + "}\n"
@@ -872,14 +860,12 @@ class TexTranslator:
                     self.state.append("table")
                 else:
                     self.state.append("tabular")
-
             elif self.command == "list":
                 result = "\\begin{enumerate}"
                 self.state.append("list")
             elif self.command == "ulist":
                 result = "\\begin{itemize}"
                 self.state.append("ulist")
-
             elif self.command == "end":
                 if self.state[-1].startswith("figure"):
                     args = self.state[-1].split("|")
@@ -888,57 +874,43 @@ class TexTranslator:
                     if caption != "":
                         result += "\\caption{" + caption + "}\n"
                     if label != "":
-                        result += "\\label{" + label +"}\n"
+                        result += "\\label{" + label + "}\n"
                     result += "\\end{figure}\n"
                     self.state.pop()
-
                 elif self.state[-1] == "table":
                     result = "\\end{tabular}\n\\end{table}"
                     self.state.pop()
-
                 elif self.state[-1] == "tabular":
                     result = "\\end{tabular}"
                     self.state.pop()
-
                 elif self.state[-1] == "list":
                     result = "\\end{enumerate}"
                     self.state.pop()
-
                 elif self.state[-1] == "ulist":
                     result = "\\end{itemize}"
                     self.state.pop()
-
                 elif self.state[-1] == "definition":
                     result = "\\end{definition}"
                     self.state.pop()
-
                 elif self.state[-1] == "example":
                     result = "\\qed\n\\end{example}"
                     self.state.pop()
-
                 elif self.state[-1] == "theorem":
                     result = "\\end{theorem}"
                     self.state.pop()
-
                 elif self.state[-1] == "lemma":
                     result = "\\end{lemma}"
                     self.state.pop()
-
                 elif self.state[-1] == "proof":
                     result = "\qed\n\\end{proof}"
                     self.state.pop()
-
                 elif self.state[-1] == "eq":
                     result = "\\end{equation}"
                     self.state.pop()
-
                 elif self.state[-1] == "prob":
                     result = "\\end{prob}"
                     self.state.pop()
-
         return result
-
-
 
     def translate(self, s):
         opusSpecialCharactors = ["*", "`", ":"]
@@ -949,7 +921,6 @@ class TexTranslator:
                 c = "``"
             elif c == "'" and (i == 0 or s[i-1] == " "):
                 c = "`"
-
             if self.state[-1] == "backslash":
                 if s[i] in opusSpecialCharactors:
                     result += c
@@ -958,7 +929,6 @@ class TexTranslator:
                 self.state.pop()
                 if s[i] == "[":
                     self.state.append("math")
-
             elif self.state[-1] == "comment":
                 if s[i] == "\n":
                     self.state.pop()
@@ -970,7 +940,6 @@ class TexTranslator:
                 else:
                     self.state.pop()
                     result += "[" + c
-
             elif self.state[-1] == "command":
                 if s[i] == "]":
                     self.state.append("endCommand")
@@ -979,14 +948,12 @@ class TexTranslator:
                     self.command = self.command + c
                 else:
                     self.command = self.command + c
-
             elif self.state[-1] == "openSquareBracketInCommand":
                 if s[i] == "[":
                     self.state.append("openSquareBracketInCommand")
                 elif s[i] == "]":
                     self.state.pop()
                 self.command = self.command + c
-
             elif self.state[-1] == "endCommand":
                 if s[i] == "]":
                     self.state.pop()
@@ -996,7 +963,6 @@ class TexTranslator:
                 else:
                     self.state.pop()
                     self.command = self.command + "]" + c
-
             elif self.state[-1] in ["text", "definition", "example", "theorem", "lemma", "proof", "prob"]:
                 if s[i] == "\\":
                     self.state.append("backslash")
@@ -1024,7 +990,6 @@ class TexTranslator:
                     self.state.append("openSquareBracket")
                 else:
                     result += c
-
             elif self.state[-1] in ["list", "ulist"]:
                 if s[i] == "\\":
                     self.state.append("backslash")
@@ -1054,7 +1019,6 @@ class TexTranslator:
                     result += "\\item "
                 else:
                     result += c
-
             elif self.state[-1] in ["table", "tabular"]:
                 if s[i] == "\\":
                     self.state.append("backslash")
@@ -1082,7 +1046,6 @@ class TexTranslator:
                     self.state.append("openSquareBracket")
                 else:
                     result += c
-
             elif self.state[-1].startswith("figure"):
                 if s[i] == "\\":
                     self.state.append("backslash")
@@ -1110,7 +1073,6 @@ class TexTranslator:
                     self.state.append("openSquareBracket")
                 else:
                     result += c
-
             elif self.state[-1] == "code":
                 if s.find("[[end]]") == i:
                     result += "\\end{Verbatim}"
@@ -1121,7 +1083,6 @@ class TexTranslator:
                 if s.find("[[end]]") == i-6:
                     self.state.pop()
                     self.state.pop()
-
             elif self.state[-1] == "bold":
                 if s[i] == "\\":
                     self.state.append("backslash")
@@ -1144,7 +1105,6 @@ class TexTranslator:
                     self.state.append("inlinemath")
                 else:
                     result += c
-
             elif self.state[-1] == "emph":
                 if s[i] == "\\":
                     self.state.append("backslash")
@@ -1167,14 +1127,12 @@ class TexTranslator:
                     self.state.append("inlinemath")
                 else:
                     result += c
-
             elif self.state[-1] == "inlinecode":
                 if s[i] == "`":
                     result += "`}"
                     self.state.pop()
                 else:
                     result += s[i]
-
             elif self.state[-1] == "inlinemath":
                 if s[i] == "\\":
                     self.state.append("inlinemathbackslash")
@@ -1183,7 +1141,6 @@ class TexTranslator:
                     self.state.pop()
                 else:
                     result += c
-
             elif self.state[-1] == "inlinemathbackslash":
                 result += "\\" + c
                 self.state.pop()
@@ -1195,25 +1152,20 @@ class TexTranslator:
                     self.state.append("openSquareBracket")
                 else:
                     result += c
-
             elif self.state[-1] == "mathbackslash":
                 result += "\\" + c
                 self.state.pop()
-
                 if s[i] == "]":
                     self.state.pop()
-
         return result
 
 
 source = sys.argv[1]
 options = []
-if len(sys.argv)>2:
+if len(sys.argv) > 2:
     options = sys.argv[2:]
 if source.endswith(".opus.project"):
-
     parser = ControllerParser(source)
-
     information = {}
     information["AUTHORTH"] = []
     information["AUTHOREN"] = []
@@ -1225,7 +1177,7 @@ if source.endswith(".opus.project"):
         if command.startswith("document("):
             if not inADocument:
                 information = {}
-                projectName = command.split(":")[0].replace("document(","").replace(")","").strip()
+                projectName = command.split(":")[0].replace("document(", "").replace(")", "").strip()
                 projectType = command.split(":")[1].strip()
                 information["DOCUMENT"] = projectName
                 information["TYPE"] = projectType
@@ -1234,7 +1186,6 @@ if source.endswith(".opus.project"):
                 information["CHAPTER"] = []
                 information["APPENDIX"] = []
                 inADocument = True
-
         elif command.startswith("end."):
             if inADocument:
                 outputfile = information["DOCUMENT"] + ".tex"
@@ -1251,53 +1202,52 @@ if source.endswith(".opus.project"):
 
         elif command.startswith("name-th:"):
             if inADocument:
-                information["NAMETH"] = command.replace("name-th:","").replace("\\:",":").strip()
+                information["NAMETH"] = command.replace("name-th:", "").replace("\\:", ":").strip()
         elif command.startswith("name-en:"):
             if inADocument:
-                information["NAMEEN"] = command.replace("name-en:","").replace("\\:",":").strip()
+                information["NAMEEN"] = command.replace("name-en:", "").replace("\\:", ":").strip()
         elif command.startswith("author-th:"):
             if inADocument:
-                information["AUTHORTH"].append(command.replace("author-th:","").replace("\\:",":").strip())
+                information["AUTHORTH"].append(command.replace("author-th:", "").replace("\\:", ":").strip())
         elif command.startswith("author-en:"):
             if inADocument:
-                information["AUTHOREN"].append(command.replace("author-en:","").replace("\\:",":").strip())
+                information["AUTHOREN"].append(command.replace("author-en:", "").replace("\\:", ":").strip())
         elif command.startswith("advisor-th:"):
             if inADocument:
-                information["ADVISORTH"] = command.split("|")[0].replace("advisor-th:","").replace("\\:",":").strip() + ", " + command.split("|")[1].replace("degree:","").strip()
+                information["ADVISORTH"] = command.split("|")[0].replace("advisor-th:", "").replace("\\:", ":").strip() + ", " + command.split("|")[1].replace("degree:", "").strip()
         elif command.startswith("advisor-en:"):
             if inADocument:
-                information["ADVISOREN"] = command.split("|")[0].replace("advisor-en:","").replace("\\:",":").strip() + ", " + command.split("|")[1].replace("degree:","").strip()
+                information["ADVISOREN"] = command.split("|")[0].replace("advisor-en:", "").replace("\\:", ":").strip() + ", " + command.split("|")[1].replace("degree:", "").strip()
         elif command.startswith("committee1-th:"):
             if inADocument:
-                information["COMMITTEE1TH"] = command.replace("committee1-th:","").replace("\\:",":").strip()
+                information["COMMITTEE1TH"] = command.replace("committee1-th:", "").replace("\\:", ":").strip()
         elif command.startswith("committee1-en:"):
             if inADocument:
-                information["COMMITTEE1EN"] = command.replace("committee1-en:","").replace("\\:",":").strip()
+                information["COMMITTEE1EN"] = command.replace("committee1-en:", "").replace("\\:", ":").strip()
         elif command.startswith("committee2-th:"):
             if inADocument:
-                information["COMMITTEE2TH"] = command.replace("committee2-th:","").replace("\\:",":").strip()
+                information["COMMITTEE2TH"] = command.replace("committee2-th:", "").replace("\\:", ":").strip()
         elif command.startswith("committee2-en:"):
             if inADocument:
-                information["COMMITTEE2EN"] = command.replace("committee2-en:","").replace("\\:",":").strip()
+                information["COMMITTEE2EN"] = command.replace("committee2-en:", "").replace("\\:", ":").strip()
         elif command.startswith("headdepartment-th:"):
             if inADocument:
-                information["HEADDEPARTMENTTH"] = command.replace("headdepartment-th:","").replace("\\:",":").strip()
+                information["HEADDEPARTMENTTH"] = command.replace("headdepartment-th:", "").replace("\\:", ":").strip()
         elif command.startswith("headdepartment-en:"):
             if inADocument:
-                information["HEADDEPARTMENTEN"] = command.replace("headdepartment-en:","").replace("\\:",":").strip()
-
+                information["HEADDEPARTMENTEN"] = command.replace("headdepartment-en:", "").replace("\\:", ":").strip()
         elif command.startswith("abstract-th:"):
             if inADocument:
-                information["ABSTRACTTH"] = command.replace("abstract-th:","").replace("\\:",":").strip()
+                information["ABSTRACTTH"] = command.replace("abstract-th:", "").replace("\\:", ":").strip()
         elif command.startswith("abstract-en:"):
             if inADocument:
-                information["ABSTRACTEN"] = command.replace("abstract-en:","").replace("\\:",":").strip()
+                information["ABSTRACTEN"] = command.replace("abstract-en:", "").replace("\\:", ":").strip()
         elif command.startswith("acknowledgement:"):
             if inADocument:
-                information["ACKNOWLEDGEMENT"] = command.replace("acknowledgement:","").replace("\\:",":").strip()
+                information["ACKNOWLEDGEMENT"] = command.replace("acknowledgement:", "").replace("\\:", ":").strip()
         elif command.startswith("reference:"):
             if inADocument:
-                information["REFERENCE"] = command.replace("reference:","").replace("\\:",":").strip()
+                information["REFERENCE"] = command.replace("reference:", "").replace("\\:", ":").strip()
         elif command.startswith("chapter("):
             if inADocument:
                 chaptername = command.replace("chapter(", "").replace(")", "").split(":")[0].strip()
@@ -1308,13 +1258,11 @@ if source.endswith(".opus.project"):
                 appendixname = command.replace("appendix(", "").replace(")", "").split(":")[0].strip()
                 appendixfile = command.replace("appendix(", "").replace(")", "").split(":")[1].strip()
                 information["APPENDIX"].append((appendixname, appendixfile))
-
     parser.close()
-
 elif source.endswith(".opus"):
     projectname = source[:-5]
     outputfile = projectname + ".tex"
-    codeWriter = CodeWriter(outputfile, {"SOURCE":source, "PROJECT":projectname})
+    codeWriter = CodeWriter(outputfile, {"SOURCE": source, "PROJECT": projectname})
     codeWriter.writeNote(options)
     codeWriter.close()
     command = LatexCaller(projectname, "reference.bib")

@@ -28,20 +28,20 @@ document(myreport): report
 	headdepartment-th: วัชรพัฐ เมตตานันท
 
 	% ชื่อไฟล์บทคัดย่อภาษาไทย
-	abstract-th: absth.opus
+	abstract-th: abstract_th.opus
 
 	% ชื่อไฟล์บทคัดย่อภาษาอังกฤษ
-	abstract-en: absen.opus
+	abstract-en: abstract_en.opus
 
 	% ชื่อไฟล์กิตติกรรมประกาศ
-	acknowledgement: ack.opus
+	acknowledgement: acknowledgement.opus
 
 	% รายการไฟล์เนื้อหา แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
-	chapter(บทนำ): chapter1.opus
-	chapter(ความรู้พื้นฐานและงานที่เกี่ยวข้อง): chapter2.opus
-	chapter(การพัฒนา): chapter3.opus
-	chapter(ผลและวิจารณ์): chapter4.opus
-	chapter(สรุป): chapter5.opus
+	chapter(บทนำ): ch1_introduction.opus
+	chapter(ความรู้พื้นฐานและงานที่เกี่ยวข้อง): ch2_related_work.opus
+	chapter(การพัฒนา): ch3_implementations.opus
+	chapter(ผลและวิจารณ์): ch4_results_and_discussion.opus
+	chapter(สรุป): ch5_conclusion.opus
 
 	% ชื่อไฟล์เอกสารอ้างอิง
 	reference: references.bib
