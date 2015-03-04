@@ -101,7 +101,7 @@ class CodeWriter:
         return result
 
     def writeReport(self):
-        print "Exporting as report..."
+        print("Exporting as report...")
         self.writeHeader()
         self.writeReportMainCover()
         self.writeReportInsideCover()
@@ -116,7 +116,7 @@ class CodeWriter:
         self.writeEnding()
 
     def writeProposal(self):
-        print "Exporting as proposal..."
+        print("Exporting as proposal...")
         self.writeHeader()
         self.writeProposalCover()
         self.writeApprovalForm(proposal=True)
