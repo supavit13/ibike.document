@@ -15,7 +15,6 @@
 import datetime
 import sys
 import os
-import re
 
 
 class ControllerParser:
@@ -76,10 +75,33 @@ class CodeWriter:
         self.writeLine(self.translator.translate(s))
 
     def thaicode(self, s):
-        return re.sub("([^\\x00-\\xff]+)", "{\\thi \\1}", s)
+        result = ""
+        thstart = []
+        thstop = []
+        state = "en"
+        for i in range(len(s)):
+            c = s[i]
+            if ord(c) >= 128:
+                if state == "en":
+                    thstart.append(i)
+                    state = "th"
+            elif state == "th":
+                thstop.append(i)
+                state = "en"
+        if state == "th":
+            thstop.append(len(s))
+        laststop = 0
+        for i in range(len(thstart)):
+            result += s[laststop:thstart[i]]
+            result += "{\\thi "
+            result += s[thstart[i]:thstop[i]]
+            result += "}"
+            laststop = thstop[i]
+        result += s[laststop:]
+        return result
 
     def writeReport(self):
-        print("Exporting as report...")
+        print "Exporting as report..."
         self.writeHeader()
         self.writeReportMainCover()
         self.writeReportInsideCover()
@@ -94,7 +116,7 @@ class CodeWriter:
         self.writeEnding()
 
     def writeProposal(self):
-        print("Exporting as proposal...")
+        print "Exporting as proposal..."
         self.writeHeader()
         self.writeProposalCover()
         self.writeApprovalForm(proposal=True)
