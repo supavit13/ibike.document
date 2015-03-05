@@ -1,3 +1,3 @@
-from install_validator import *
-from opus_document import *
-from opus_project import *
+from .install_validator import *
+from .opus_document import *
+from .opus_project import *

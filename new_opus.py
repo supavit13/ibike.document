@@ -24,17 +24,23 @@ def is_project(filename):
 
 
 def run(args):
-    if "-v" in args or "--version" in args:
-        print("OPUS %s" % VERSION)
-        return
     validation = InstallValidator.validate()
     if not validation["valid"]:
         components = validation["components"]
         for component in components:
-            print("  %s\t= %s" % (
-                component,
-                "installed" if components[component] else "not installed"
-            ))
+            if component == "python":
+                print(
+                    "  %s\t= required version 3 or later" % (component) +
+                    " (current version is %s.%s)" % (sys.version_info[:2])
+                )
+            else:
+                print("  %s\t= %s" % (
+                    component,
+                    "installed" if components[component] else "not installed"
+                ))
+        return
+    if "-v" in args or "--version" in args:
+        print("OPUS %s" % VERSION)
         return
     projects = []
     files = os.listdir(".")

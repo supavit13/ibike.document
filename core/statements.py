@@ -36,22 +36,26 @@ class Statements:
         "property_end": {
             "pattern": ["end\\."]
         },
-        "source_tag": {
-            "pattern": ["%<(\\w+)>%"],
+        "keyword_tag": {
+            "pattern": ["%<(?!\\-)((\\w+):)?([^<>%-]+)>%"],
             "options": {
-                1: {"trim": True, "lower": True},
+                2: {"trim": True, "lower": True},
+                3: {"trim": True, "lower": True}
             },
             "matches": {
-                1: "name"
+                2: "type",
+                3: "name"
             }
         },
-        "template_tag": {
-            "pattern": ["%<--(\\w+)-->%"],
+        "template_include": {
+            "pattern": ["%<--((\\w+):)?([^<>%-]+)-->%"],
             "options": {
-                1: {"trim": True, "lower": True},
+                2: {"trim": True, "lower": True},
+                3: {"trim": True, "lower": True}
             },
             "matches": {
-                1: "name"
+                2: "type",
+                3: "name"
             }
         }
     }
@@ -68,18 +72,18 @@ class Statements:
     def get(statement):
         if not Statements.prepare:
             Statements.prepare_statements()
+        if statement not in Statements.statements:
+            return None
         return Statements.statements[statement]
 
     @staticmethod
-    def parse(statement_type, string, replacement=None):
-        statement = Statements.get(statement_type)
-        matches = statement["pattern"].search(string)
+    def process_match(statement, matches):
         if not matches:
             return None
         if "matches" not in statement:
             return matches.group(0)
         else:
-            ret_matches = {}
+            ret_matches = {"matches": matches}
             for match in statement["matches"]:
                 match_string = matches.group(match)
                 if not match_string:
@@ -93,3 +97,18 @@ class Statements:
                         match_string = match_string.lower()
                 ret_matches[match_name] = match_string
             return ret_matches
+
+    @staticmethod
+    def parse(statement_type, string, replacer=None):
+        statement = Statements.get(statement_type)
+        if not statement:
+            return None
+        if replacer:
+            return statement["pattern"].sub(
+                lambda m: replacer(Statements.process_match(statement, m)),
+                string
+            )
+        else:
+            return Statements.process_match(
+                statement, statement["pattern"].search(string)
+            )

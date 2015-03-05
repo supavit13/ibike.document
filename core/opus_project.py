@@ -1,5 +1,14 @@
-from logger import Logger
-from statements import Statements
+from .logger import Logger
+from .statements import Statements
+from .template_expander import TemplateExpander
+
+
+"""
+Generation sequences
+ - xelatex -output-directory=output -interaction=nonstopmode -halt-on-error -no-pdf <project>
+ - bibtex output/<project>
+ - xelatex -output-directory=output -interaction=nonstopmode -halt-on-error <project>
+"""
 
 
 class OpusProject:
@@ -165,7 +174,8 @@ class OpusProject:
             for miss in validation:
                 print("  - %s" % (miss))
             return
-        return
+        expander = TemplateExpander(project_info)
+        return expander.expand()
 
     def compile(self, args):
         self.parse_project(args)

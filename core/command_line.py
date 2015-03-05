@@ -4,19 +4,20 @@ import subprocess
 
 class CommandLine:
     @staticmethod
-    def run(command):
-        proc = CommandLine.popen(command)
+    def run(command, cwd=None):
+        proc = CommandLine.popen(command, cwd)
         while proc.poll() is None:
             pass
         return proc.poll() == 0
 
     @staticmethod
-    def popen(cmd):
+    def popen(cmd, cwd=None):
         if sys.platform == "darwin":
             return subprocess.Popen(
                 ["/bin/bash", "-l", "-c", cmd],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
+                cwd=cwd,
                 shell=False
             )
         elif sys.platform == "linux":
@@ -24,6 +25,7 @@ class CommandLine:
                 ["/bin/bash", "-c", cmd],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
+                cwd=cwd,
                 shell=False
             )
         else:
@@ -31,5 +33,6 @@ class CommandLine:
                 cmd,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
+                cwd=cwd,
                 shell=False
             )
