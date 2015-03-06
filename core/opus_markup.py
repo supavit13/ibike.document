@@ -6,7 +6,4 @@ class OpusMarkup:
         self.project = project
 
     def parse(self, line):
-        if Statements.parse("comment", line):
-            return ""
-        else:
-            return line
+        return Statements.parse("comment", line, replacer=lambda m: "")

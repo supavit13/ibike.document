@@ -1,5 +1,6 @@
 import re
 import os.path
+from datetime import datetime
 from .statements import Statements
 from .opus_markup import OpusMarkup
 
@@ -21,6 +22,7 @@ class TemplateExpander:
 
     def __init__(self, project):
         self.project = project
+        self.markup = OpusMarkup(self.project)
         self.tex_file_name = TemplateExpander.get_file_name(
             "tex", project["output_name"]
         )
@@ -36,8 +38,16 @@ class TemplateExpander:
     def parse_object(self, keyword):
         keyword_name = keyword["name"]
         keyword_sel = None
+        one_line = False
         if "selector" in keyword:
             keyword_sel = keyword["selector"]
+        if keyword_sel:
+            index = 0
+            for sel in keyword_sel:
+                if sel[-1] == "!":
+                    one_line = True
+                    keyword_sel[index] = keyword_sel[index][:-1]
+                index += 1
         if keyword_name == "name" and keyword_sel:
             return self.project["name"][keyword_sel[0]]
         elif keyword_name == "advisor" and keyword_sel:
@@ -48,24 +58,51 @@ class TemplateExpander:
             else:
                 return "%s, %s" % (advisor["name"], advisor["degree"])
         if keyword_name == "authors" and keyword_sel:
+            prefix = ""
+            suffix = ""
+            if "prefix" in keyword:
+                prefix = keyword["prefix"]
+            if "suffix" in keyword:
+                suffix = keyword["suffix"]
             output = []
             for author in self.project["authors"]:
                 output.append(author[keyword_sel[0]])
-            return "\\\\\n".join(output)
+            joiner = prefix
+            if not one_line:
+                joiner += "\n"
+            joiner += suffix
+            return joiner.join(output)
+        print(
+            "Multi-values keyword \"%s\" cannot be parsed." % (
+                keyword["matches"].group(0)
+            )
+        )
         return keyword["matches"].group(0)
 
     def parse_keyword(self, keyword):
         if ("type" in keyword
                 and self.project["output_type"] != keyword["type"]):
             return ""
-        non_string = ["name", "authors", "advisor", "abstract", "chapters"]
+        non_string = [
+            "name", "authors", "advisor",
+            "abstract", "chapters", "appendices"
+        ]
         keyword_name = keyword["name"]
         if keyword_name[0] == "[" and keyword_name[-1] == "]":
             return keyword_name[1:-1]
+        if keyword_name == "current_month":
+            return [
+                "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
+                "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
+                "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
+            ][datetime.now().month-1]
         if keyword_name in non_string:
             return self.parse_object(keyword)
         if keyword_name in self.project:
             return self.project[keyword_name]
+        print("Keyword \"%s\" cannot be parsed." % (
+            keyword["matches"].group(0)
+        ))
         return keyword["matches"].group(0)
 
     def write(self, line, target="tex"):
@@ -93,12 +130,11 @@ class TemplateExpander:
             include_path = self.project["acknowledgement"]
 
         if not os.path.exists(include_path):
-            print("%s is not found" % (include_path))
+            print("Include file \"%s\" is not found." % (include_path))
             return ""
-        markup = OpusMarkup(self.project)
         include_file = open(include_path, "r")
         output = "".join([
-            markup.parse(line) for line
+            self.markup.parse(line) for line
             in include_file.readlines()
         ])
         include_file.close()
@@ -112,6 +148,7 @@ class TemplateExpander:
             return self.parse_include(template["name"][1:-1], template)
         if (template["name"] in templates or
                 not self.expand(template["name"], templates)):
+            print("Template \"%s\" cannot be expanded." % (template["name"]))
             return template["matches"].group(0)
 
     def expand(self, template="index", templates=None):

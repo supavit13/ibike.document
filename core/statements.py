@@ -8,7 +8,7 @@ class Statements:
             "pattern": ["^\\s*$"]
         },
         "comment": {
-            "pattern": ["%.*"]
+            "pattern": ["(?<!\\\\)%.*"]
         },
         "property": {
             "pattern": [
@@ -37,20 +37,29 @@ class Statements:
             "pattern": ["end\\."]
         },
         "keyword_tag": {
-            "pattern": ["%<(?!\\-)((\\w+):)?([^<>%-\\.]+)(\\.([^<>%-]+))?>%"],
+            "pattern": [
+                "%<(?<!\\-)((\\w+):)?(([^<>%\\-]+)<=)?([^<>%\\-\\.]+)" +
+                "(\\.([^<>%\\-=]+))?(=>([^<>%\\-]+))?>%"
+            ],
             "options": {
                 2: {"trim": True, "lower": True},
-                3: {"trim": True, "lower": True},
-                5: {"trim": True, "lower": True, "split": "."}
+                4: {"trim": True, "lower": True},
+                5: {"trim": True, "lower": True},
+                7: {"trim": True, "lower": True, "split": "."},
+                9: {"trim": True, "lower": True}
             },
             "matches": {
                 2: "type",
-                3: "name",
-                5: "selector"
+                4: "prefix",
+                5: "name",
+                7: "selector",
+                9: "suffix"
             }
         },
         "template_include": {
-            "pattern": ["%<--((\\w+):)?([^<>%-\\.]+)(\\.([^<>%-]+))?-->%"],
+            "pattern": [
+                "%<\\-\\-((\\w+):)?([^<>%\\-\\.]+)(\\.([^<>%\\-]+))?\\-\\->%"
+            ],
             "options": {
                 2: {"trim": True, "lower": True},
                 3: {"trim": True, "lower": True},

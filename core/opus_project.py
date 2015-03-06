@@ -143,7 +143,7 @@ class OpusProject:
         project_info = {}
         line_no = 0
         for line in lines:
-            line = Statements.get("comment")["pattern"].sub("", line)
+            line = Statements.parse("comment", line, replacer=lambda m: "")
             line_no += 1
             if Statements.parse("empty", line):
                 # Skip empty line
