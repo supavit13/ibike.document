@@ -37,25 +37,29 @@ class Statements:
             "pattern": ["end\\."]
         },
         "keyword_tag": {
-            "pattern": ["%<(?!\\-)((\\w+):)?([^<>%-]+)>%"],
+            "pattern": ["%<(?!\\-)((\\w+):)?([^<>%-\\.]+)(\\.([^<>%-]+))?>%"],
             "options": {
                 2: {"trim": True, "lower": True},
-                3: {"trim": True, "lower": True}
+                3: {"trim": True, "lower": True},
+                5: {"trim": True, "lower": True, "split": "."}
             },
             "matches": {
                 2: "type",
-                3: "name"
+                3: "name",
+                5: "selector"
             }
         },
         "template_include": {
-            "pattern": ["%<--((\\w+):)?([^<>%-]+)-->%"],
+            "pattern": ["%<--((\\w+):)?([^<>%-\\.]+)(\\.([^<>%-]+))?-->%"],
             "options": {
                 2: {"trim": True, "lower": True},
-                3: {"trim": True, "lower": True}
+                3: {"trim": True, "lower": True},
+                5: {"trim": True, "lower": True, "split": "."}
             },
             "matches": {
                 2: "type",
-                3: "name"
+                3: "name",
+                5: "selector"
             }
         }
     }
@@ -95,6 +99,8 @@ class Statements:
                         match_string = match_string.strip()
                     if "lower" in options and options["lower"]:
                         match_string = match_string.lower()
+                    if "split" in options:
+                        match_string = match_string.split(options["split"])
                 ret_matches[match_name] = match_string
             return ret_matches
 

@@ -1,6 +1,7 @@
 import re
 import os.path
 from .statements import Statements
+from .opus_markup import OpusMarkup
 
 
 TEMPLATE_DIR = "core/templates"
@@ -32,6 +33,27 @@ class TemplateExpander:
     def encode_thai(self, string):
         return re.sub("([^\\x00-\\xff]+)", "{\\\\thi \\1}", string)
 
+    def parse_object(self, keyword):
+        keyword_name = keyword["name"]
+        keyword_sel = None
+        if "selector" in keyword:
+            keyword_sel = keyword["selector"]
+        if keyword_name == "name" and keyword_sel:
+            return self.project["name"][keyword_sel[0]]
+        elif keyword_name == "advisor" and keyword_sel:
+            advisor = self.project["advisor"][keyword_sel[0]]
+            keyword_sel = keyword_sel[1:]
+            if keyword_sel:
+                return "%s" % (advisor[keyword_sel[0]])
+            else:
+                return "%s, %s" % (advisor["name"], advisor["degree"])
+        if keyword_name == "authors" and keyword_sel:
+            output = []
+            for author in self.project["authors"]:
+                output.append(author[keyword_sel[0]])
+            return "\\\\\n".join(output)
+        return keyword["matches"].group(0)
+
     def parse_keyword(self, keyword):
         if ("type" in keyword
                 and self.project["output_type"] != keyword["type"]):
@@ -40,7 +62,9 @@ class TemplateExpander:
         keyword_name = keyword["name"]
         if keyword_name[0] == "[" and keyword_name[-1] == "]":
             return keyword_name[1:-1]
-        if keyword_name in self.project and keyword_name not in non_string:
+        if keyword_name in non_string:
+            return self.parse_object(keyword)
+        if keyword_name in self.project:
             return self.project[keyword_name]
         return keyword["matches"].group(0)
 
@@ -61,10 +85,31 @@ class TemplateExpander:
         for line in references_file.readlines():
             self.write(line, target="ref")
 
+    def parse_include(self, template_name, template):
+        include_path = None
+        if template_name == "abstract" and template["selector"]:
+            include_path = self.project["abstract"][template["selector"][0]]
+        elif template_name == "acknowledgement":
+            include_path = self.project["acknowledgement"]
+
+        if not os.path.exists(include_path):
+            print("%s is not found" % (include_path))
+            return ""
+        markup = OpusMarkup(self.project)
+        include_file = open(include_path, "r")
+        output = "".join([
+            markup.parse(line) for line
+            in include_file.readlines()
+        ])
+        include_file.close()
+        return output
+
     def parse_template(self, template, templates):
         if ("type" in template
                 and self.project["output_type"] != template["type"]):
             return ""
+        if template["name"][0] == "[" and template["name"][-1] == "]":
+            return self.parse_include(template["name"][1:-1], template)
         if (template["name"] in templates or
                 not self.expand(template["name"], templates)):
             return template["matches"].group(0)
@@ -87,4 +132,5 @@ class TemplateExpander:
             )
             if line is not None:
                 self.write(line, target="tex")
+        template_file.close()
         return True

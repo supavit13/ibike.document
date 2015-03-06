@@ -95,12 +95,12 @@ class OpusProject:
                 project[field].append(data)
         elif (prop["name"].startswith("name-") or
                 prop["name"].startswith("abstract")):
-            for field in ["name", "abstract"]:
-                if field not in project:
-                    project[field] = {}
-                for lang in ["en", "th"]:
-                    if prop["name"].endswith(lang):
-                        project[field][lang] = prop["value"]
+            field = "name" if prop["name"].startswith("name-") else "abstract"
+            if field not in project:
+                project[field] = {}
+            for lang in ["en", "th"]:
+                if prop["name"].endswith(lang):
+                    project[field][lang] = prop["value"]
         elif prop["name"].startswith("advisor-"):
             if "advisor" not in project:
                 project["advisor"] = {}
