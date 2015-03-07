@@ -35,6 +35,45 @@ class TemplateExpander:
     def encode_thai(self, string):
         return re.sub("([^\\x00-\\xff]+)", "{\\\\thi \\1}", string)
 
+    def parse_chapter_keyword(self, chapter, keyword):
+        if keyword["name"] == "chapter_name":
+            return chapter["name"]
+        elif keyword["name"] == "chapter_file":
+            return chapter["file"]
+        print("Chapter keyword %s cannot be parsed." % (
+            keyword["matches"].group(0)
+        ))
+        return keyword["matches"].group(0)
+
+    def parse_chapter_template(self, chapter, template):
+        if template["name"] == "[chapter_file]":
+            return self.parse_include("chapter", chapter)
+        print("Chapter template \"%s\" cannot be parsed." % (
+            template["matches"].group(0)
+        ))
+        return template["matches"].group(0)
+
+    def parse_chapter(self, template, chapter):
+        template_path = os.path.join(
+            TEMPLATE_DIR, TemplateExpander.get_file_name("tpl", template)
+        )
+        if not os.path.exists(template_path):
+            return None
+        template_file = open(template_path, "r")
+        output = []
+        for line in template_file.readlines():
+            if line is not None:
+                line = Statements.parse(
+                    "template_include", line,
+                    replacer=lambda t: self.parse_chapter_template(chapter, t)
+                )
+                output.append(Statements.parse(
+                    "keyword_tag", line,
+                    replacer=lambda m: self.parse_chapter_keyword(chapter, m)
+                ))
+        template_file.close()
+        return "".join(output)
+
     def parse_object(self, keyword):
         keyword_name = keyword["name"]
         keyword_sel = None
@@ -57,7 +96,7 @@ class TemplateExpander:
                 return "%s" % (advisor[keyword_sel[0]])
             else:
                 return "%s, %s" % (advisor["name"], advisor["degree"])
-        if keyword_name == "authors" and keyword_sel:
+        elif keyword_name == "authors" and keyword_sel:
             prefix = ""
             suffix = ""
             if "prefix" in keyword:
@@ -72,6 +111,14 @@ class TemplateExpander:
                 joiner += "\n"
             joiner += suffix
             return joiner.join(output)
+        elif keyword_name in ["chapters", "appendices"]:
+            field = "chapter" if keyword_name == "chapters" else "appendix"
+            chapters_output = []
+            if keyword_name not in self.project:
+                return ""
+            for chapter in self.project[keyword_name]:
+                chapters_output.append(self.parse_chapter(field, chapter))
+            return "".join(chapters_output)
         print(
             "Multi-values keyword \"%s\" cannot be parsed." % (
                 keyword["matches"].group(0)
@@ -128,6 +175,8 @@ class TemplateExpander:
             include_path = self.project["abstract"][template["selector"][0]]
         elif template_name == "acknowledgement":
             include_path = self.project["acknowledgement"]
+        elif template_name == "chapter":
+            include_path = template["file"]
 
         if not os.path.exists(include_path):
             print("Include file \"%s\" is not found." % (include_path))
@@ -151,7 +200,7 @@ class TemplateExpander:
             print("Template \"%s\" cannot be expanded." % (template["name"]))
             return template["matches"].group(0)
 
-    def expand(self, template="index", templates=None):
+    def expand(self, template="index", templates=None, as_string=False):
         if not templates:
             self.parse_references()
         templates = templates or []
@@ -160,14 +209,24 @@ class TemplateExpander:
             TEMPLATE_DIR, TemplateExpander.get_file_name("tpl", template)
         )
         if not os.path.exists(template_path):
-            return False
+            if as_string:
+                return None
+            else:
+                return False
         template_file = open(template_path, "r")
+        output = []
         for line in template_file.readlines():
             line = Statements.parse(
                 "template_include", line,
                 replacer=lambda t: self.parse_template(t, templates)
             )
             if line is not None:
-                self.write(line, target="tex")
+                if as_string:
+                    output.append(line)
+                else:
+                    self.write(line, target="tex")
         template_file.close()
-        return True
+        if as_string:
+            return "".join(output)
+        else:
+            return True

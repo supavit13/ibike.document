@@ -84,15 +84,15 @@ class OpusProject:
             if "property" in prop:
                 project["output_name"] = prop["property"]
             project["output_type"] = prop["value"].lower()
-        elif prop["name"] == "chapter" or prop["name"] == "appendix":
-            for field in ["chapters", "appendices"]:
-                if field not in project:
-                    project[field] = []
-                data = {}
-                if "property" in prop:
-                    data["name"] = prop["property"]
-                data["file"] = prop["value"]
-                project[field].append(data)
+        elif prop["name"] in ["chapter", "appendix"]:
+            field = "chapters" if prop["name"] == "chapter" else "appendices"
+            if field not in project:
+                project[field] = []
+            data = {}
+            if "property" in prop:
+                data["name"] = prop["property"]
+            data["file"] = prop["value"]
+            project[field].append(data)
         elif (prop["name"].startswith("name-") or
                 prop["name"].startswith("abstract")):
             field = "name" if prop["name"].startswith("name-") else "abstract"
