@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import os.path
 from datetime import datetime
@@ -23,6 +24,7 @@ class TemplateExpander:
     def __init__(self, project):
         self.project = project
         self.markup = OpusMarkup(self.project)
+        self.success = True
         self.tex_file_name = TemplateExpander.get_file_name(
             "tex", project["output_name"]
         )
@@ -137,15 +139,17 @@ class TemplateExpander:
         keyword_name = keyword["name"]
         if keyword_name[0] == "[" and keyword_name[-1] == "]":
             return keyword_name[1:-1]
-        if keyword_name == "current_month":
+        elif keyword_name == "current_month":
             return [
                 "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
                 "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
                 "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
             ][datetime.now().month-1]
-        if keyword_name in non_string:
+        elif keyword_name in non_string:
             return self.parse_object(keyword)
-        if keyword_name in self.project:
+        elif keyword_name == "reference":
+            return os.path.splitext(self.ref_file_name)[0]
+        elif keyword_name in self.project:
             return self.project[keyword_name]
         print("Keyword \"%s\" cannot be parsed." % (
             keyword["matches"].group(0)
@@ -182,12 +186,23 @@ class TemplateExpander:
             print("Include file \"%s\" is not found." % (include_path))
             return ""
         include_file = open(include_path, "r")
-        output = "".join([
-            self.markup.parse(line) for line
-            in include_file.readlines()
-        ])
+        output = []
+        line_no = 0
+        empty_line = 0
+        for line in include_file.readlines():
+            line_no += 1
+            parsed_line = self.markup.parse(line, line_no, include_path)
+            if parsed_line.strip() == "":
+                empty_line += 1
+            else:
+                empty_line = 0
+            if empty_line < 2:
+                output.append(parsed_line)
+            else:
+                empty_line = 0
+            self.success = self.success and self.markup.success
         include_file.close()
-        return output
+        return "".join(output)
 
     def parse_template(self, template, templates):
         if ("type" in template
@@ -230,3 +245,10 @@ class TemplateExpander:
             return "".join(output)
         else:
             return True
+
+    def close(self):
+        self.tex_file.close()
+        self.ref_file.close()
+        if not self.success:
+            os.remove(self.tex_file_name)
+            os.remove(self.ref_file_name)

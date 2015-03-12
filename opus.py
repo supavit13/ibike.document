@@ -146,6 +146,7 @@ class CodeWriter:
         self.writeLine("\\usepackage{fancyvrb}")
         self.writeLine("\\usepackage{amsmath}")
         self.writeLine("\\usepackage{url}")
+        self.writeLine("\\usepackage{indentfirst}")
         self.writeLine("\\usepackage[font=large, labelfont=bf]{caption}")
         self.writeLine("\\titleformat{\\chapter}[display]{\\Huge\\bfseries\\centering}{\\chaptertitlename\\ \\thechapter}{20pt}{}")
         self.writeLine("")
@@ -398,7 +399,7 @@ class CodeWriter:
         self.writeLine("\\vspace{0.3in}")
         self.writeLine("")
         self.writeLine("")
-        self.write("\\hspace{-0.5in}")
+        self.writeLine("\\hspace{-0.5in}\\indent")
         f = open(information["ABSTRACTTH"], "r")
         s = f.readline()
         while s:
@@ -428,7 +429,7 @@ class CodeWriter:
         self.writeLine("\\vspace{0.3in}")
         self.writeLine("")
         self.writeLine("")
-        self.write("\\hspace{-0.5in}")
+        self.writeLine("\\hspace{-0.5in}\\indent")
         f = open(information["ABSTRACTEN"], "r")
         s = f.readline()
         while s:

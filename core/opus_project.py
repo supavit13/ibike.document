@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from .logger import Logger
 from .statements import Statements
 from .template_expander import TemplateExpander
@@ -175,7 +176,8 @@ class OpusProject:
                 print("  - %s" % (miss))
             return
         expander = TemplateExpander(project_info)
-        return expander.expand()
+        expander.expand()
+        expander.close()
 
     def compile(self, args):
         self.parse_project(args)

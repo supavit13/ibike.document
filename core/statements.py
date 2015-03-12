@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 
 
@@ -9,6 +10,70 @@ class Statements:
         },
         "comment": {
             "pattern": ["(?<!\\\\)%.*"]
+        },
+        "basic_style": {
+            "pattern": [
+                "(?<!\\\\)\\*(.*)\\*|(?<!\\\\)_(.*)_|" +
+                "(?<!\\\\)`(.*)`"
+            ],
+            "matches": {
+                1: "bold",
+                2: "italic",
+                3: "code"
+            }
+        },
+        "list_item": {
+            "pattern": [
+                "(?<!\\\\)#(.*)|(\\[\\[end\\]\\])"
+            ],
+            "options": {
+                1: {"trim": True}
+            },
+            "matches": {
+                1: "text",
+                2: "end_command"
+            }
+        },
+        "markup": {
+            "pattern": [
+                "(?<!\\\\)\\[\\[([^\\|:()\\[\\]]+)(\\s*\\[([^\\]]+)\\])?" +
+                "(\\s*\\(([^()\\]]*)\\))?(\\s*:\\s*([^:\\]\\|]+))?" +
+                "(\\s*\\|\\s*([^\\]]+)?)?\\]\\]"
+            ],
+            "options": {
+                1: {"trim": True, "lower": True},
+                3: {"trim": True},
+                5: {"trim": True},
+                7: {"trim": True},
+                9: {"trim": True, "split": "|"}
+            },
+            "matches": {
+                1: "tag",
+                3: "format",
+                5: "expression",
+                7: "value",
+                9: "attributes"
+            }
+        },
+        "markup_keyword": {
+            "pattern": [
+                "((\\w+):)?(([^<>%\\-]+)<=)?([^<>%\\-\\.]+)" +
+                "(\\.([^<>%\\-=]+))?(=>([^<>%\\-]+))?"
+            ],
+            "options": {
+                2: {"trim": True, "lower": True},
+                4: {"trim": True, "lower": True},
+                5: {"trim": True, "lower": True},
+                7: {"trim": True, "lower": True, "split": "."},
+                9: {"trim": True, "lower": True}
+            },
+            "matches": {
+                2: "type",
+                4: "prefix",
+                5: "name",
+                7: "selector",
+                9: "suffix"
+            }
         },
         "property": {
             "pattern": [
