@@ -1,0 +1,48 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%        OPUS Document Ganerator
+%%        Project %<output_type>%: %<output_name>%
+%%
+%%        Computer Engineering Project
+%%        Department of Computer Engineering
+%%        Faculty of Engineering at Sri Racha
+%%        Kasetsart University, Sri Racha Campus
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt,a4paper,oneside]{book}
+\usepackage{fontspec}
+\usepackage{xunicode}
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{lastpage}
+\usepackage{titlesec}
+\usepackage{fancyvrb}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{indentfirst}
+\usepackage[font=large, labelfont=bf]{caption}
+\titleformat{\chapter}[display]{\Huge\bfseries\centering}{\chaptertitlename\ \thechapter}{20pt}{}
+\defaultfontfeatures{Scale=1.23}
+\XeTeXlinebreaklocale{th_TH}
+\newcommand{\thi}{\fontspec[Scale=1.23,Path=fonts/,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFont=*-Italic,BoldItalicFont=*-BoldItalic]{THSarabunNew}}
+\newcommand\thisYear{\advance\year by 543 \the\year\advance\year by -543}
+%<--th:index_th-->%
+\linespread{1.2}
+\setlength{\textwidth}{5.8in}
+\setlength{\topmargin}{-0.5in}
+\setlength{\oddsidemargin}{0.5in}
+\setlength{\parskip}{0.2in}
+\setlength{\parindent}{0.5in}
+\setlength{\textheight}{9.0in}
+\setlength{\footskip}{0.5in}
+\graphicspath{{./images/}}
+
+%%%%%%%%%%%%%%%%%%% Document Start %%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+\pagestyle{myheadings}
+\pagenumbering{gobble}
+{
+\fontsize{14pt}{16pt}\selectfont
+%<--proposal:proposal-->%%<--report:report-->%
+}
+\end{document}
+%%%%%%%%%%%%%%%%%%%% Document Ending %%%%%%%%%%%%%%%%%%%%%

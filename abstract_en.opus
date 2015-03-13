@@ -1,4 +1,4 @@
 % กล่าวถึงโครงงานโดยสรุปทั้ง ที่มา, วัตถุประสงค์, วิธีการ, เทคนิคที่ใช้, ผลการดำเนินงาน, ประโยชน์ที่ได้ เป็นภาษาอังกฤษ
-This project is to develop a system for writing proposals or reports in the computer engineering project class. The system is set to be easy for users to create a report without any problem about the format. We create a domain specific language for writing reports and develop a python program to translate codes into \LaTeX. After that, we use \LaTeX\ for generating documents we need.
+This project is to develop a system for writing proposals or reports in the computer engineering project class. The system is set to be easy for users to create a report without any problem about the format. We create a domain specific language for writing reports and develop a python program to translate codes into \LaTeX. After that, we use \LaTeX for generating documents we need.
 
 The result of the project is a tool for writing reports easier than before. Writers can concentrate on the contents and have nothing to do about the format anymore. We also develop a python program to setup the environment on Windows and OSX easily.

@@ -1,53 +1,52 @@
-% document(ชื่อไฟล์ pdf ที่ต้องการ): [proposal, report]
-% proposal สำหรับสร้างเล่มข้อเสนอโครงงาน
-% report สำหรับสร้างเล่มโครงงาน
+% document(<output name>): [proposal, report]
 document(myreport): report
+	% Output language: [en, th]
+	language: th
 
-	% ชื่อโครงงานภาษาไทยและอังกฤษ
+	% Project name
 	name-th: ระบบการเรียงพิมพ์สำหรับเอกสารการศึกษา
 	name-en: A Typesetting System for Academic Documents
 
-	% ชื่อสมาชิกภาษาไทยและอังกฤษ
+	% Author names
 	author-th: วัชรพัฐ เมตตานันท
 	author-en: Vacharapat Mettanant
 
-	% กรณีที่มีสมาชิกมากกว่าหนึ่งคน การเรียงลำดับของไทยและอังกฤษต้องเหมือนกัน
-	%author-th: ประสิทธิชัย ณรงค์เลิศฤทธิ์
-	%author-en: Prasitthichai Naronglerdrit
+	% If more than one author, add more.
+	% author-th: ประสิทธิชัย ณรงค์เลิศฤทธิ์
+	% author-en: Prasitthichai Naronglerdrit
 
-
-	% ชื่อที่ปรึกษาภาษาไทยและอังกฤษ
-	advisor-th: ปุณณะ ยศปัญญา | degree: วศ.บ.	% ชื่อที่ปรึกษาต้องใส่วุฒิด้วยเสมอ
+	% Advisor (both Thai and English)
+	advisor-th: ปุณณะ ยศปัญญา | degree: วศ.บ.	   % Advisor must have a degree
 	advisor-en: Poonna Yospanya | degree: B.Eng.
 
-	% ชื่อกรรมการหลักและกรรมการรอง ไม่จำเป็นต้องมีภาษาอังกฤษ
+	% Name of 1st and 2nd Committee (based on output language)
 	committee1-th: อนันต์ บรรหารสกุล
 	committee2-th: เกื้อกูล กุมรัมย์
 
-	% ชื่อหัวหน้าสาขา ไม่จำเป็นต้องมีภาษาอังกฤษ
+	% Name of head of department
 	headdepartment-th: วัชรพัฐ เมตตานันท
 
-	% ชื่อไฟล์บทคัดย่อภาษาไทย
+	% Thai language abstract
 	abstract-th: abstract_th.opus
 
-	% ชื่อไฟล์บทคัดย่อภาษาอังกฤษ
+	% English language abstract
 	abstract-en: abstract_en.opus
 
-	% ชื่อไฟล์กิตติกรรมประกาศ
+	% Acknowledgement
 	acknowledgement: acknowledgement.opus
 
-	% รายการไฟล์เนื้อหา แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
+	% Contents. Separated by each chapter.
+	% chapter(<chapter title>): <file to the chapter>
 	chapter(บทนำ): ch1_introduction.opus
 	chapter(ความรู้พื้นฐานและงานที่เกี่ยวข้อง): ch2_related_work.opus
 	chapter(การพัฒนา): ch3_implementations.opus
 	chapter(ผลและวิจารณ์): ch4_results_and_discussion.opus
 	chapter(สรุป): ch5_conclusion.opus
 
-	% ชื่อไฟล์เอกสารอ้างอิง
+	% References file
 	reference: references.bib
 
-	% ชื่อไฟล์ภาคผนวก แบ่งเป็นไฟล์ละบท ใส่ชื่อบทในวงเล็บให้ถูกต้อง
-	%appendix(คู่มือการติดตั้งโปรแกรม): appendixA.opus
-	%appendix(คู่มือการใช้งานโปรแกรม): appendixB.opus
-
-end.
+	% Appendices. Separated by each appendix.
+	% appendix(<appendix title>): <file to the appendix>
+	% appendix(คู่มือการติดตั้งโปรแกรม): appendixA.opus
+	% appendix(คู่มือการใช้งานโปรแกรม): appendixB.opus
