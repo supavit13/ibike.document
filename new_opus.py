@@ -1,3 +1,18 @@
+# -*- coding: utf-8 -*-
+
+# OPUS Document Generator for Computer Engineering Project
+# Department of Computer Engineering
+# Faculty of Engineering at Sri Racha
+# Kasetsart University, Sri Racha Campus.
+#
+# Licensing Information:
+# The OPUS project was started in 2013
+# Developed by
+#    Vacharapat Mettanant (v1.0.0 2013)
+#    Sirisak Lueangsaksri (v2.0.0 2015)
+# Maintainance by
+#    Sirisak Lueangsaksri (2014-2015)
+
 import sys
 import os
 from core import OpusProject, OpusDocument, InstallValidator
@@ -67,7 +82,6 @@ def run(args):
         print("%s is not OPUS project file" % (args[1]))
         return
     print("Working with %s" % (project))
-    print("Args: %s" % (args))
     if is_project(project):
         opus_project = OpusProject(project)
         opus_project.compile(args)

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 from .command_line import CommandLine
 

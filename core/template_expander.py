@@ -23,6 +23,9 @@ class TemplateExpander:
 
     def __init__(self, project):
         self.project = project
+        self.project["expander"] = {
+            "citations": False
+        }
         self.markup = OpusMarkup(self.project)
         self.success = True
         self.tex_file_name = TemplateExpander.get_file_name(
@@ -42,7 +45,7 @@ class TemplateExpander:
             return chapter["name"]
         elif keyword["name"] == "chapter_file":
             return chapter["file"]
-        print("Chapter keyword %s cannot be parsed." % (
+        print("Warning! Chapter keyword %s cannot be parsed." % (
             keyword["matches"].group(0)
         ))
         return keyword["matches"].group(0)
@@ -50,7 +53,7 @@ class TemplateExpander:
     def parse_chapter_template(self, chapter, template):
         if template["name"] == "[chapter_file]":
             return self.parse_include("chapter", chapter)
-        print("Chapter template \"%s\" cannot be parsed." % (
+        print("Warning! Chapter template \"%s\" cannot be parsed." % (
             template["matches"].group(0)
         ))
         return template["matches"].group(0)
@@ -122,7 +125,7 @@ class TemplateExpander:
                 chapters_output.append(self.parse_chapter(field, chapter))
             return "".join(chapters_output)
         print(
-            "Multi-values keyword \"%s\" cannot be parsed." % (
+            "Warning! Multi-values keyword \"%s\" cannot be parsed." % (
                 keyword["matches"].group(0)
             )
         )
@@ -151,7 +154,7 @@ class TemplateExpander:
             return os.path.splitext(self.ref_file_name)[0]
         elif keyword_name in self.project:
             return self.project[keyword_name]
-        print("Keyword \"%s\" cannot be parsed." % (
+        print("Warning! Keyword \"%s\" cannot be parsed." % (
             keyword["matches"].group(0)
         ))
         return keyword["matches"].group(0)
@@ -183,7 +186,7 @@ class TemplateExpander:
             include_path = template["file"]
 
         if not os.path.exists(include_path):
-            print("Include file \"%s\" is not found." % (include_path))
+            print("Warning! Include file \"%s\" is not found." % (include_path))
             return ""
         include_file = open(include_path, "r")
         output = []
@@ -212,7 +215,9 @@ class TemplateExpander:
             return self.parse_include(template["name"][1:-1], template)
         if (template["name"] in templates or
                 not self.expand(template["name"], templates)):
-            print("Template \"%s\" cannot be expanded." % (template["name"]))
+            print("Warning! Template \"%s\" cannot be expanded." % (
+                template["name"]
+            ))
             return template["matches"].group(0)
 
     def expand(self, template="index", templates=None, as_string=False):
@@ -224,6 +229,7 @@ class TemplateExpander:
             TEMPLATE_DIR, TemplateExpander.get_file_name("tpl", template)
         )
         if not os.path.exists(template_path):
+            print("Warning! Template \"%s\" not found." % (template))
             if as_string:
                 return None
             else:
@@ -252,3 +258,5 @@ class TemplateExpander:
         if not self.success:
             os.remove(self.tex_file_name)
             os.remove(self.ref_file_name)
+            return (self.project, None, None)
+        return (self.project, self.tex_file_name, self.ref_file_name)

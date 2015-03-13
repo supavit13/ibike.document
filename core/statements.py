@@ -24,7 +24,7 @@ class Statements:
         },
         "list_item": {
             "pattern": [
-                "(?<!\\\\)#(.*)|(\\[\\[end\\]\\])"
+                "(?<!\\\\)#(.*)|(\\[\\[\\s*end\\s*\\]\\])"
             ],
             "options": {
                 1: {"trim": True}

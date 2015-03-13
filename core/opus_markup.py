@@ -132,7 +132,7 @@ class OpusMarkup:
 
             return output
         elif markup["tag"] in ["ref", "cite"]:
-            if "expression" not in markup:
+            if "expression" not in markup or markup["expression"] == "":
                 self.success = False
                 Logger.error(
                     file_path, line_no,
@@ -140,7 +140,7 @@ class OpusMarkup:
                     "Reference must contains a reference name"
                 )
                 return ""
-
+            self.project["expander"]["citations"] = True
             return "\\%s{%s}" % (markup["tag"], markup["expression"])
         elif not inside and markup["tag"] == "image":
             settings = {
@@ -199,10 +199,76 @@ class OpusMarkup:
         elif markup["tag"] == "math":
             self.inside.append(markup["tag"])
             return "\\["
-        # elif markup["tag"] == "code":
-        #     self.inside.append(markup["tag"])
-        # elif markup["tag"] == "table":
-        #     self.inside.append(markup["tag"])
+        elif markup["tag"] == "code":
+            settings = {
+                "frame": True,
+                "math": False
+            }
+
+            options = ["fontfamily=tt"]
+
+            if "math" in attrs:
+                if attrs["math"].lower() in ["true", "false"]:
+                    settings["math"] = bool(attrs["math"].lower())
+                else:
+                    Logger.warning(
+                        file_path, line_no,
+                        "InvalidAttribute",
+                        "Attribute \"math\" must be" +
+                        " either \"true\" or \"false\""
+                    )
+            if "frame" in attrs:
+                if attrs["frame"].lower() in ["true", "false"]:
+                    settings["frame"] = bool(attrs["frame"].lower())
+                else:
+                    Logger.warning(
+                        file_path, line_no,
+                        "InvalidAttribute",
+                        "Attribute \"frame\" must be" +
+                        " either \"true\" or \"false\""
+                    )
+
+            self.inside.append(markup["tag"])
+            if settings["frame"]:
+                options.append("frame=single")
+            if settings["math"]:
+                options.append("commandchars=\\\\\\{\\}")
+                options.append("codes={\\catcode`$=3\\catcode`^=7}")
+
+            return "\\begin{Verbatim}[%s]" % (",".join(options))
+        elif markup["tag"] == "table":
+            if "format" not in markup:
+                self.success = False
+                Logger.error(
+                    file_path, line_no,
+                    "InvalidFormat",
+                    "Table must contains a format"
+                )
+                return ""
+
+            settings = {
+                "reference": "",
+                "format": "",
+                "caption": ""
+            }
+
+            if "format" in markup:
+                settings["format"] = markup["format"]
+            if "expression" in markup:
+                settings["reference"] = markup["expression"]
+
+            output = ""
+            if settings["caption"] != "":
+                self.inside.append("table_labeled")
+                output += "\\begin{table}\n\\centering\n\\caption{%s}\n" % (
+                    settings["caption"]
+                )
+            else:
+                self.inside.append("table")
+            if settings["reference"] != "":
+                output += "\\label{%s}" % (settings["reference"])
+            output += "\\begin{tabular}{%s}" % (settings["format"])
+            return output
         elif markup["tag"] == "end" and len(self.inside) > 0:
             ending_type = self.inside.pop()
             if ending_type == "list":
@@ -211,10 +277,15 @@ class OpusMarkup:
                 return "\\end{itemize}"
             elif ending_type == "eq":
                 return "\\end{equation}"
-            elif ending_type == "table":
-                return "\\end{tabular}\n\\end{table}"
+            elif ending_type in ["table", "table_labeled"]:
+                output = "\\end{tabular}"
+                if ending_type == "table_labeled":
+                    output = "\n\\end{table}"
+                return output
             elif ending_type == "math":
                 return "\\]"
+            elif ending_type == "code":
+                return "\\end{Verbatim}"
         elif keyword and keyword["name"] in self.project:
             return self.parse_keyword(keyword, line_no, file_path)
         Logger.warning(

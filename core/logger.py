@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Logger:
     @staticmethod
     def warning(file_name, line, exception, message):

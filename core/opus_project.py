@@ -2,14 +2,7 @@
 from .logger import Logger
 from .statements import Statements
 from .template_expander import TemplateExpander
-
-
-"""
-Generation sequences
- - xelatex -output-directory=output -interaction=nonstopmode -halt-on-error -no-pdf <project>
- - bibtex output/<project>
- - xelatex -output-directory=output -interaction=nonstopmode -halt-on-error <project>
-"""
+from .latex_compiler import LatexCompiler
 
 
 class OpusProject:
@@ -147,7 +140,6 @@ class OpusProject:
             line = Statements.parse("comment", line, replacer=lambda m: "")
             line_no += 1
             if Statements.parse("empty", line):
-                # Skip empty line
                 continue
             prop = Statements.parse("property", line)
             prop_end = Statements.parse("property_end", line)
@@ -175,9 +167,21 @@ class OpusProject:
             for miss in validation:
                 print("  - %s" % (miss))
             return
+        print("Compiling project...")
         expander = TemplateExpander(project_info)
         expander.expand()
-        expander.close()
+        return expander.close()
 
     def compile(self, args):
-        self.parse_project(args)
+        verbose = False
+        keep = False
+        if "-verbose" in args:
+            verbose = True
+            args.remove("-verbose")
+        if "-keep" in args:
+            keep = True
+            args.remove("-keep")
+        project_info, tex_file, ref_file = self.parse_project(args)
+        if not tex_file or not ref_file:
+            return
+        LatexCompiler(project_info, tex_file, ref_file, keep).run(verbose)

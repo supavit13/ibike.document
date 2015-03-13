@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class OpusDocument:
     def __init__(self, filename):
         self.filename = filename
