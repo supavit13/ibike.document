@@ -209,7 +209,8 @@ class TemplateExpander:
 
     def parse_template(self, template, templates):
         if ("type" in template
-                and self.project["output_type"] != template["type"]):
+                and self.project["output_type"] != template["type"]
+                and self.project["output_language"] != template["type"]):
             return ""
         if template["name"][0] == "[" and template["name"][-1] == "]":
             return self.parse_include(template["name"][1:-1], template)

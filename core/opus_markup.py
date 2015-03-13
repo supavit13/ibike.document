@@ -99,7 +99,7 @@ class OpusMarkup:
     def parse_list_item(self, item, line_no, file_path):
         if "text" in item:
             return "\\item{%s}" % (item["text"])
-        elif "end_command" in item:
+        elif "list_command" in item:
             return item["matches"].group(0)
         Logger.warning(
             file_path, line_no,
@@ -140,7 +140,8 @@ class OpusMarkup:
                     "Reference must contains a reference name"
                 )
                 return ""
-            self.project["expander"]["citations"] = True
+            if markup["tag"] == "cite":
+                self.project["expander"]["citations"] = True
             return "\\%s{%s}" % (markup["tag"], markup["expression"])
         elif not inside and markup["tag"] == "image":
             settings = {
@@ -256,6 +257,8 @@ class OpusMarkup:
                 settings["format"] = markup["format"]
             if "expression" in markup:
                 settings["reference"] = markup["expression"]
+            if "value" in markup:
+                settings["caption"] = markup["value"]
 
             output = ""
             if settings["caption"] != "":
@@ -280,7 +283,7 @@ class OpusMarkup:
             elif ending_type in ["table", "table_labeled"]:
                 output = "\\end{tabular}"
                 if ending_type == "table_labeled":
-                    output = "\n\\end{table}"
+                    output += "\n\\end{table}"
                 return output
             elif ending_type == "math":
                 return "\\]"

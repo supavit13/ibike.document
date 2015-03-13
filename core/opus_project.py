@@ -12,6 +12,7 @@ class OpusProject:
     def validate_project(self, project):
         missing = []
         properties = {
+            "output_language": "Output Language",
             "output_name": "Output File Name",
             "output_type": "Output Type",
             "name": "Project Name (TH & EN)",
@@ -78,6 +79,8 @@ class OpusProject:
             if "property" in prop:
                 project["output_name"] = prop["property"]
             project["output_type"] = prop["value"].lower()
+        elif prop["name"] == "language":
+            project["output_language"] = prop["value"].lower()
         elif prop["name"] in ["chapter", "appendix"]:
             field = "chapters" if prop["name"] == "chapter" else "appendices"
             if field not in project:
@@ -148,7 +151,7 @@ class OpusProject:
                     self.project_file, line_no,
                     "InvalidProperty", "Invalid property"
                 )
-                return
+                return (None, None, None)
             if prop_end:
                 break
             if prop:
@@ -157,7 +160,7 @@ class OpusProject:
                         self.project_file, line_no,
                         "InvalidProperty", "Property did not have name or value"
                     )
-                    return
+                    return (None, None, None)
                 self.set_property(project_info, prop)
         if len(args) > 0:
             project_info["output_type"] = args[0].lower()
@@ -166,7 +169,7 @@ class OpusProject:
             print("Error! Following project properties are missing...")
             for miss in validation:
                 print("  - %s" % (miss))
-            return
+            return (None, None, None)
         print("Compiling project...")
         expander = TemplateExpander(project_info)
         expander.expand()

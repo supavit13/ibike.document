@@ -24,14 +24,14 @@ class Statements:
         },
         "list_item": {
             "pattern": [
-                "(?<!\\\\)#(.*)|(\\[\\[\\s*end\\s*\\]\\])"
+                "(?<!\\\\)#(.*)|(\\[\\[\\s*(end|list|ulist)\\s*\\]\\])"
             ],
             "options": {
                 1: {"trim": True}
             },
             "matches": {
                 1: "text",
-                2: "end_command"
+                2: "list_command"
             }
         },
         "markup": {
