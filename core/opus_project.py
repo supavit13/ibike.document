@@ -178,12 +178,16 @@ class OpusProject:
     def compile(self, args):
         verbose = False
         keep = False
-        if "-verbose" in args:
-            verbose = True
-            args.remove("-verbose")
-        if "-keep" in args:
-            keep = True
-            args.remove("-keep")
+        for key in ["--verbose", "-V"]:
+            if key in args:
+                verbose = True
+                args.remove(key)
+                break
+        for key in ["--keep", "-k"]:
+            if key in args:
+                keep = True
+                args.remove(key)
+                break
         project_info, tex_file, ref_file = self.parse_project(args)
         if not tex_file or not ref_file:
             return

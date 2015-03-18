@@ -33,7 +33,7 @@ class LatexCompiler:
             cwd=os.path.abspath(""),
             verbose=verbose
         ):
-            print("Failed. Add \"-verbose\" flag to show error messages.")
+            print("Failed. Add \"--verbose\" flag to show error messages.")
             return
         if self.project["expander"]["citations"]:
             print("Linking references...")
@@ -42,7 +42,7 @@ class LatexCompiler:
                 cwd=os.path.abspath(""),
                 verbose=verbose
             ):
-                print("Failed. Add \"-verbose\" flag to show error messages.")
+                print("Failed. Add \"--verbose\" flag to show error messages.")
                 return
         xelatex_command.remove("-no-pdf")
         print("Generating PDF file...")
@@ -51,7 +51,7 @@ class LatexCompiler:
             cwd=os.path.abspath(""),
             verbose=verbose
         ):
-            print("Failed. Add \"-verbose\" flag to show error messages.")
+            print("Failed. Add \"--verbose\" flag to show error messages.")
             return
         pdf_file_name = self.project["output_name"]+".pdf"
         pdf_path = os.path.join(output_dir, pdf_file_name)

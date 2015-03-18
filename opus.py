@@ -15,7 +15,7 @@
 
 import sys
 import os
-from core import OpusProject, OpusDocument, InstallValidator
+from core import OpusHelp, OpusProject, OpusDocument, InstallValidator
 
 
 VERSION = "2.0.0"
@@ -40,14 +40,22 @@ def is_project(filename):
 
 def run(args):
     validation = InstallValidator.validate()
-    if not validation["valid"]:
+    if not validation["valid"] or "--validate" in args:
         components = validation["components"]
         for component in components:
             if component == "python":
-                print(
-                    "  %s\t= required version 3 or later" % (component) +
-                    " (current version is %s.%s)" % (sys.version_info[:2])
-                )
+                if sys.version_info[0] < 3:
+                    print(
+                        "  %s\t= required version 3 or later" % (component) +
+                        " (current version is %s.%s)" % (sys.version_info[:2])
+                    )
+                else:
+                    print(
+                        "  %s\t= installed" % (component) +
+                        " (current version is %s.%s)" % (
+                            sys.version_info[:2]
+                        )
+                    )
             else:
                 print("  %s\t= %s" % (
                     component,
@@ -57,6 +65,11 @@ def run(args):
     if "-v" in args or "--version" in args:
         print("OPUS %s" % VERSION)
         return
+    for key in ["--help", "-h", "-?"]:
+        if key in args:
+            args.remove(key)
+            OpusHelp.print_help(args)
+            return
     projects = []
     files = os.listdir(".")
     for file_name in files:
@@ -87,6 +100,8 @@ def run(args):
         opus_project.compile(args)
     else:
         # TODO (if needed)
+        print("OPUS document compilation is not implemented yet.")
+        print("Please contact the developer if you want to use this.")
         opus_doc = OpusDocument(project)
         opus_doc.compile(args)
 
