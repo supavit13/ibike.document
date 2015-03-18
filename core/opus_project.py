@@ -7,7 +7,7 @@ from .latex_compiler import LatexCompiler
 
 class OpusProject:
     def __init__(self, filename):
-        self.project_file = open(filename, "r")
+        self.project_file = open(filename, "r", encoding="utf8")
 
     def validate_project(self, project):
         missing = []

@@ -34,8 +34,8 @@ class TemplateExpander:
         self.ref_file_name = TemplateExpander.get_file_name(
             "ref", project["output_name"]
         )
-        self.tex_file = open(self.tex_file_name, "w", encoding="utf-8")
-        self.ref_file = open(self.ref_file_name, "w", encoding="utf-8")
+        self.tex_file = open(self.tex_file_name, "w", encoding="utf8")
+        self.ref_file = open(self.ref_file_name, "w", encoding="utf8")
 
     def encode_thai(self, string):
         return re.sub("([^\\x00-\\xff]+)", "{\\\\thi \\1}", string)
@@ -64,7 +64,7 @@ class TemplateExpander:
         )
         if not os.path.exists(template_path):
             return None
-        template_file = open(template_path, "r")
+        template_file = open(template_path, "r", encoding="utf8")
         output = []
         for line in template_file.readlines():
             if line is not None:
@@ -172,7 +172,7 @@ class TemplateExpander:
             self.ref_file.write(self.encode_thai(line))
 
     def parse_references(self):
-        references_file = open(self.project["reference"], "r")
+        references_file = open(self.project["reference"], "r", encoding="utf8")
         for line in references_file.readlines():
             self.write(line, target="ref")
 
@@ -188,7 +188,7 @@ class TemplateExpander:
         if not os.path.exists(include_path):
             print("Warning! Include file \"%s\" is not found." % (include_path))
             return ""
-        include_file = open(include_path, "r")
+        include_file = open(include_path, "r", encoding="utf8")
         output = []
         line_no = 0
         empty_line = 0
@@ -235,7 +235,7 @@ class TemplateExpander:
                 return None
             else:
                 return False
-        template_file = open(template_path, "r")
+        template_file = open(template_path, "r", encoding="utf8")
         output = []
         for line in template_file.readlines():
             line = Statements.parse(

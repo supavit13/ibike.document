@@ -35,5 +35,5 @@ class CommandLine:
                 stdout=None if verbose else subprocess.PIPE,
                 stderr=None if verbose else subprocess.PIPE,
                 cwd=cwd,
-                shell=False
+                shell=True
             )
