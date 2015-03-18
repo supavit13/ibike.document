@@ -55,6 +55,8 @@ class LatexCompiler:
             return
         pdf_file_name = self.project["output_name"]+".pdf"
         pdf_path = os.path.join(output_dir, pdf_file_name)
+        if os.path.exists(pdf_file_name):
+            os.remove(pdf_file_name)
         if os.path.exists(pdf_path):
             os.rename(pdf_path, pdf_file_name)
         if not self.keep:

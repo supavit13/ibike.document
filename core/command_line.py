@@ -16,24 +16,24 @@ class CommandLine:
         if sys.platform == "darwin":
             return subprocess.Popen(
                 ["/bin/bash", "-l", "-c", cmd],
-                stdout=None if verbose else subprocess.PIPE,
-                stderr=None if verbose else subprocess.PIPE,
+                stdout=None if verbose else subprocess.DEVNULL,
+                stderr=None if verbose else subprocess.DEVNULL,
                 cwd=cwd,
                 shell=False
             )
         elif sys.platform == "linux":
             return subprocess.Popen(
                 ["/bin/bash", "-c", cmd],
-                stdout=None if verbose else subprocess.PIPE,
-                stderr=None if verbose else subprocess.PIPE,
+                stdout=None if verbose else subprocess.DEVNULL,
+                stderr=None if verbose else subprocess.DEVNULL,
                 cwd=cwd,
                 shell=False
             )
         else:
             return subprocess.Popen(
                 cmd,
-                stdout=None if verbose else subprocess.PIPE,
-                stderr=None if verbose else subprocess.PIPE,
+                stdout=None if verbose else subprocess.DEVNULL,
+                stderr=None if verbose else subprocess.DEVNULL,
                 cwd=cwd,
                 shell=True
             )
