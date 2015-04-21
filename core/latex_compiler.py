@@ -35,6 +35,8 @@ class LatexCompiler:
         ):
             print("Failed. Add \"--verbose\" flag to show error messages.")
             return
+        bbl_file_name = self.project["output_name"]+".bbl"
+        bbl_file = os.path.join(output_dir, bbl_file_name)
         if self.project["expander"]["citations"]:
             print("Linking references...")
             if not CommandLine.run(
@@ -44,6 +46,18 @@ class LatexCompiler:
             ):
                 print("Failed. Add \"--verbose\" flag to show error messages.")
                 return
+            if os.path.exists(bbl_file_name):
+                os.remove(bbl_file_name)
+            if os.path.exists(bbl_file):
+                shutil.copy(bbl_file, bbl_file_name)
+        print("Regenerating auxilary files...")
+        if not CommandLine.run(
+            " ".join(xelatex_command),
+            cwd=os.path.abspath(""),
+            verbose=verbose
+        ):
+            print("Failed. Add \"--verbose\" flag to show error messages.")
+            return
         xelatex_command.remove("-no-pdf")
         print("Generating PDF file...")
         if not CommandLine.run(
@@ -61,6 +75,8 @@ class LatexCompiler:
             os.rename(pdf_path, pdf_file_name)
         if not self.keep:
             print("Cleaning...")
+            if os.path.exists(bbl_file_name):
+                os.remove(bbl_file_name)
             if os.path.exists(output_dir):
                 shutil.rmtree(output_dir)
             if os.path.exists(self.tex_file):

@@ -18,7 +18,7 @@ import os
 from core import OpusHelp, OpusProject, OpusDocument, InstallValidator
 
 
-VERSION = "2.0.2"
+VERSION = "2.0.3"
 
 
 supported_ext = {

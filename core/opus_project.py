@@ -170,7 +170,7 @@ class OpusProject:
             for miss in validation:
                 print("  - %s" % (miss))
             return (None, None, None)
-        print("Compiling project...")
+        print("Compiling project as %s..." % (project_info["output_type"]))
         expander = TemplateExpander(project_info)
         expander.expand()
         return expander.close()
