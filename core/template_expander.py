@@ -41,9 +41,9 @@ class TemplateExpander:
         return re.sub("([^\\x00-\\xff]+)", "{\\\\thi \\1}", string)
 
     def parse_chapter_keyword(self, chapter, keyword):
-        if keyword["name"] == "chapter_name":
+        if keyword["name"] in ["chapter_name", "appendix_name"]:
             return chapter["name"]
-        elif keyword["name"] == "chapter_file":
+        elif keyword["name"] in ["chapter_file", "appendix_file"]:
             return chapter["file"]
         print("Warning! Chapter keyword %s cannot be parsed." % (
             keyword["matches"].group(0)
@@ -53,6 +53,8 @@ class TemplateExpander:
     def parse_chapter_template(self, chapter, template):
         if template["name"] == "[chapter_file]":
             return self.parse_include("chapter", chapter)
+        elif template["name"] == "[appendix_file]":
+            return self.parse_include("appendix", chapter)
         print("Warning! Chapter template \"%s\" cannot be parsed." % (
             template["matches"].group(0)
         ))
@@ -182,7 +184,7 @@ class TemplateExpander:
             include_path = self.project["abstract"][template["selector"][0]]
         elif template_name == "acknowledgement":
             include_path = self.project["acknowledgement"]
-        elif template_name == "chapter":
+        elif template_name in ["chapter", "appendix"]:
             include_path = template["file"]
 
         if not os.path.exists(include_path):
