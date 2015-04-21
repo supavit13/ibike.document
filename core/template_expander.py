@@ -65,6 +65,9 @@ class TemplateExpander:
             TEMPLATE_DIR, TemplateExpander.get_file_name("tpl", template)
         )
         if not os.path.exists(template_path):
+            print("Warning! Chapter template \"%s\" is not found." % (
+                template_path
+            ))
             return None
         template_file = open(template_path, "r", encoding="utf8")
         output = []
@@ -124,7 +127,9 @@ class TemplateExpander:
             if keyword_name not in self.project:
                 return ""
             for chapter in self.project[keyword_name]:
-                chapters_output.append(self.parse_chapter(field, chapter))
+                chapter_output = self.parse_chapter(field, chapter)
+                if chapter_output is not None:
+                    chapters_output.append(chapter_output)
             return "".join(chapters_output)
         print(
             "Warning! Multi-values keyword \"%s\" cannot be parsed." % (
