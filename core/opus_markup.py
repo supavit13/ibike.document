@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
+import os.path
 from .logger import Logger
 from .statements import Statements
 
 """
 Validation
-- References
-- Images path
+- References not exists
 """
 
 
@@ -162,6 +162,14 @@ class OpusMarkup:
                 settings["width"] = attrs["width"]
             if "float" in attrs:
                 settings["float"] = attrs["float"]
+
+            if not os.path.exists("images/%s" % (settings["path"])):
+                Logger.warning(
+                    file_path, line_no,
+                    "InvalidImage",
+                    "Image path \"%s\" is not exists" % (settings["path"])
+                )
+                return ""
 
             output = ""
             if settings["caption"] != "":
