@@ -85,6 +85,12 @@ class OpusMarkup:
                 style["italic"],
                 replacer=lambda m: self.parse_style(m, line_no, file_path)
             ))
+        elif "underline" in style:
+            return "\\underline{%s}" % (Statements.parse(
+                "basic_style",
+                style["underline"],
+                replacer=lambda m: self.parse_style(m, line_no, file_path)
+            ))
         elif "code" in style:
             return "{\\ttfamily\\verb`%s`}" % (style["code"])
         Logger.warning(
