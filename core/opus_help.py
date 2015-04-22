@@ -13,6 +13,7 @@ class OpusHelp:
         flags = {
             "--help | -h | -?": "print this help messages",
             "--keep | -k": "keep all output files",
+            "--update | -u": "check for opus updates",
             "--version | -v": "print opus version",
             "--verbose | -V": "print all command line output",
             "--validate": "print install validation summary"

@@ -15,10 +15,11 @@
 
 import sys
 import os
-from core import OpusHelp, OpusProject, OpusDocument, InstallValidator
+import time
+from core import OpusHelp, OpusProject, OpusDocument, InstallValidator, Updater
 
 
-VERSION = "2.0.5"
+VERSION = "2.0.6"
 
 
 supported_ext = {
@@ -62,6 +63,7 @@ def run(args):
                     "installed" if components[component] else "not installed"
                 ))
         return
+    InstallValidator.update_updater()
     if "-v" in args or "--version" in args:
         print("OPUS %s" % VERSION)
         return
@@ -69,6 +71,20 @@ def run(args):
         if key in args:
             args.remove(key)
             OpusHelp.print_help(args)
+            return
+    for key in ["--update", "-u"]:
+        if key in args:
+            args.remove(key)
+            updater = Updater(VERSION)
+            updater.update()
+            notice = False
+            print("Checking for OPUS updates...")
+            while not updater.finish():
+                if not notice and updater.has_new_update():
+                    print("Updating OPUS to v%s..." % (updater.get_version()))
+                    notice = True
+            if updater.is_failed():
+                print("OPUS update is failed. Process will try again next time.")
             return
     projects = []
     files = os.listdir(".")
@@ -94,6 +110,8 @@ def run(args):
     elif len(args) >= 2:
         print("%s is not OPUS project file" % (args[1]))
         return
+    updater = Updater(VERSION)
+    updater.update()
     print("Working with %s" % (project))
     if is_project(project):
         opus_project = OpusProject(project)
@@ -104,6 +122,19 @@ def run(args):
         print("Please contact the developer if you want to use this.")
         opus_doc = OpusDocument(project)
         opus_doc.compile(args)
+
+    start_time = time.time()
+    timeout = False
+    notice = False
+    while not updater.finish():
+        if not timeout and time.time() - start_time > 3:
+            print("Please wait while OPUS checking for new update...")
+            timeout = True
+        if not notice and updater.has_new_update():
+            print("Updating OPUS to v%s..." % (updater.get_version()))
+            notice = True
+    if updater.is_failed():
+        print("OPUS update is failed. Process will try again next time.")
 
 
 if __name__ == "__main__":
