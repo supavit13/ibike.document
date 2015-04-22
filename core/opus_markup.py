@@ -74,24 +74,51 @@ class OpusMarkup:
         )
         return keyword["matches"].group(0)
 
+    def parse_escaped(self, escaped, line_no, file_path):
+        if "character" in escaped:
+            return escaped["character"]
+        Logger.warning(
+            file_path, line_no,
+            "InvalidEscaped",
+            "Escaped character \"%s\" cannot be parsed" % (
+                escaped["matches"].group(0)
+            )
+        )
+        return escaped["matches"].group(0)
+
     def parse_style(self, style, line_no, file_path):
         if "bold" in style:
-            return "\\textbf{%s}" % (Statements.parse(
+            line = "\\textbf{%s}" % (Statements.parse(
                 "basic_style",
                 style["bold"],
                 replacer=lambda m: self.parse_style(m, line_no, file_path)
             ))
+            return "%s" % (Statements.parse(
+                "escaped_character",
+                line,
+                replacer=lambda m: self.parse_escaped(m, line_no, file_path)
+            ))
         elif "italic" in style:
-            return "\\emph{%s}" % (Statements.parse(
+            line = "\\emph{%s}" % (Statements.parse(
                 "basic_style",
                 style["italic"],
                 replacer=lambda m: self.parse_style(m, line_no, file_path)
             ))
+            return "%s" % (Statements.parse(
+                "escaped_character",
+                line,
+                replacer=lambda m: self.parse_escaped(m, line_no, file_path)
+            ))
         elif "underline" in style:
-            return "\\underline{%s}" % (Statements.parse(
+            line = "\\underline{%s}" % (Statements.parse(
                 "basic_style",
                 style["underline"],
                 replacer=lambda m: self.parse_style(m, line_no, file_path)
+            ))
+            return "%s" % (Statements.parse(
+                "escaped_character",
+                line,
+                replacer=lambda m: self.parse_escaped(m, line_no, file_path)
             ))
         elif "code" in style:
             return "{\\ttfamily\\verb`%s`}" % (style["code"])
@@ -333,6 +360,11 @@ class OpusMarkup:
             line,
             replacer=lambda m: self.parse_style(m, line_no, file_path)
         )
+        line = "%s" % (Statements.parse(
+            "escaped_character",
+            line,
+            replacer=lambda m: self.parse_escaped(m, line_no, file_path)
+        ))
         if len(self.inside) > 0 and self.inside[-1] in ["list", "ulist"]:
             if Statements.parse("list_item", line):
                 line = Statements.parse(
