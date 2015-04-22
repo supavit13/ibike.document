@@ -258,7 +258,8 @@ class OpusMarkup:
             settings = {
                 "reference": "",
                 "format": "",
-                "caption": ""
+                "caption": "",
+                "float": ""
             }
 
             if "format" in markup:
@@ -267,11 +268,15 @@ class OpusMarkup:
                 settings["reference"] = markup["expression"]
             if "value" in markup:
                 settings["caption"] = markup["value"]
+            if "float" in attrs:
+                settings["caption"] = attrs["float"]
 
             output = ""
             if settings["caption"] != "":
                 self.inside.append("table_labeled")
-                output += "\\begin{table}\n\\centering\n\\caption{%s}\n" % (
+                output += "\\begin{table}%s\n\\centering\n\\caption{%s}\n" % (
+                    ("" if settings["float"] == ""
+                        else "[%s]" % (settings["float"])),
                     settings["caption"]
                 )
             else:

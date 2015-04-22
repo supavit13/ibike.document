@@ -79,6 +79,8 @@ class Updater(threading.Thread):
                 break
         if not self.has_new_update():
             self.failed = False
+            if os.path.exists(UPDATE_FILE):
+                os.remove(UPDATE_FILE)
             return
         while not self.ready:
             time.sleep(0.1)

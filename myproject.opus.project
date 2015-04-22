@@ -12,8 +12,8 @@ document(myreport): report
 	author-en: Vacharapat Mettanant
 
 	% If more than one author, add more.
-	% author-th: ประสิทธิชัย ณรงค์เลิศฤทธิ์
-	% author-en: Prasitthichai Naronglerdrit
+	author-th: สิริศักดิ์ เหลืองศักดิ์ศรี
+	author-en: Sirisak Lueangsaksri
 
 	% Advisor (both Thai and English)
 	advisor-th: ปุณณะ ยศปัญญา | degree: วศ.บ.	   % Advisor must have a degree

@@ -109,10 +109,10 @@ class Statements:
             ],
             "options": {
                 2: {"trim": True, "lower": True},
-                4: {"trim": True, "lower": True},
+                4: {"lower": True},
                 5: {"trim": True, "lower": True},
                 7: {"trim": True, "lower": True, "split": "."},
-                9: {"trim": True, "lower": True}
+                9: {"lower": True}
             },
             "matches": {
                 2: "type",
