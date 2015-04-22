@@ -24,7 +24,9 @@ class TemplateExpander:
     def __init__(self, project):
         self.project = project
         self.project["expander"] = {
-            "citations": False
+            "citations": False,
+            "figures": False,
+            "tables": False
         }
         self.markup = OpusMarkup(self.project)
         self.success = True
@@ -34,6 +36,7 @@ class TemplateExpander:
         self.ref_file_name = TemplateExpander.get_file_name(
             "ref", project["output_name"]
         )
+        self.tex_lines = []
         self.tex_file = open(self.tex_file_name, "w", encoding="utf8")
         self.ref_file = open(self.ref_file_name, "w", encoding="utf8")
 
@@ -168,7 +171,7 @@ class TemplateExpander:
 
     def write(self, line, target="tex"):
         if target == "tex":
-            self.tex_file.write(
+            self.tex_lines.append(
                 self.encode_thai(
                     Statements.parse(
                         "keyword_tag", line, replacer=self.parse_keyword
@@ -191,7 +194,12 @@ class TemplateExpander:
             include_path = self.project["acknowledgement"]
         elif template_name in ["chapter", "appendix"]:
             include_path = template["file"]
+        elif template_name in ["listoftables", "listoffigures"]:
+            return template["matches"].group(0)
 
+        if include_path is None:
+            print("Warning! Template \"%s\" is not found." % (template_name))
+            return ""
         if not os.path.exists(include_path):
             print("Warning! Include file \"%s\" is not found." % (include_path))
             return ""
@@ -260,7 +268,34 @@ class TemplateExpander:
         else:
             return True
 
+    def parse_post_template(self, template):
+        if ("type" in template
+                and self.project["output_type"] != template["type"]
+                and self.project["output_language"] != template["type"]):
+            return ""
+        if template["name"][0] == "[" and template["name"][-1] == "]":
+            template_name = template["name"][1:-1]
+            expander = self.project["expander"]
+            if (template_name == "listoftables" and expander["tables"] or
+                    template_name == "listoffigures" and expander["figures"]):
+                return "\\%s" % (template_name)
+            else:
+                return ""
+        print("Warning! Template \"%s\" cannot be expanded." % (
+            template["name"]
+        ))
+        return ""
+
+    def post_process(self):
+        for line in self.tex_lines:
+            line = Statements.parse(
+                "template_include", line,
+                replacer=lambda t: self.parse_post_template(t)
+            )
+            self.tex_file.write(line)
+
     def close(self):
+        self.post_process()
         self.tex_file.close()
         self.ref_file.close()
         if not self.success:

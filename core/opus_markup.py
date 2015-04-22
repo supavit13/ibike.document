@@ -221,6 +221,7 @@ class OpusMarkup:
                 output += "\n\\label{%s}" % (settings["reference"])
             if settings["caption"] != "":
                 output += "\n\\end{figure}"
+            self.project["expander"]["figures"] = True
             return output
         elif markup["tag"] in ["list", "ulist"]:
             self.inside.append(markup["tag"])
@@ -308,6 +309,7 @@ class OpusMarkup:
 
             output = ""
             if settings["caption"] != "":
+                self.project["expander"]["tables"] = True
                 self.inside.append("table_labeled")
                 output += "\\begin{table}%s\n\\centering\n\\caption{%s}\n" % (
                     "[%s]" % (settings["float"])
