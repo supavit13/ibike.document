@@ -104,6 +104,7 @@ class Updater(threading.Thread):
                     os.mkdir(target_file)
                 continue
             if (target_file.endswith(".opus") or
+                target_file.endswith(".bib") or
                     target_file.endswith(".opus.project")):
                 continue
             file_exists = os.path.exists(target_file)
