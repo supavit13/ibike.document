@@ -11,6 +11,7 @@ class OpusHelp:
         )
         print("where flags are...")
         flags = {
+            "--debug | -d": "enable debugging mode",
             "--help | -h | -?": "print this help messages",
             "--keep | -k": "keep all output files",
             "--update | -u": "check for opus updates",

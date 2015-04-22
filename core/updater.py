@@ -6,7 +6,10 @@ import os
 import shutil
 import re
 import time
-import urllib.request
+try:
+    import urllib.request
+except ImportError:
+    pass
 
 
 UPDATE_LINK = "https://bitbucket.org/topmettanant/opus/get/master.zip"

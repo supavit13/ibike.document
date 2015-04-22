@@ -269,14 +269,14 @@ class OpusMarkup:
             if "value" in markup:
                 settings["caption"] = markup["value"]
             if "float" in attrs:
-                settings["caption"] = attrs["float"]
+                settings["float"] = attrs["float"]
 
             output = ""
             if settings["caption"] != "":
                 self.inside.append("table_labeled")
                 output += "\\begin{table}%s\n\\centering\n\\caption{%s}\n" % (
-                    ("" if settings["float"] == ""
-                        else "[%s]" % (settings["float"])),
+                    "[%s]" % (settings["float"])
+                    if settings["float"] != "" else "",
                     settings["caption"]
                 )
             else:
