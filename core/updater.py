@@ -5,6 +5,7 @@ import zlib
 import os
 import shutil
 import re
+import time
 import urllib.request
 
 
@@ -17,6 +18,7 @@ class Updater(threading.Thread):
         self.current_version = current_version
         self.version = None
         self.failed = True
+        self.ready = False
         self.version_pattern = re.compile("VERSION\\s*=\\s*\"([\\d\\.]+)\"")
         threading.Thread.__init__(self)
 
@@ -50,6 +52,9 @@ class Updater(threading.Thread):
     def finish(self):
         return not self.is_alive()
 
+    def ready_to_update(self):
+        self.ready = True
+
     def update(self):
         self.start()
 
@@ -75,6 +80,8 @@ class Updater(threading.Thread):
         if not self.has_new_update():
             self.failed = False
             return
+        while not self.ready:
+            time.sleep(0.1)
         for info in zfile.infolist():
             if top_dir is None and info.file_size == 0:
                 top_dir = info.filename

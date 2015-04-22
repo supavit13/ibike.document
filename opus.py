@@ -77,6 +77,7 @@ def run(args):
             args.remove(key)
             updater = Updater(VERSION)
             updater.update()
+            updater.ready_to_update()
             notice = False
             print("Checking for OPUS updates...")
             while not updater.finish():
@@ -122,10 +123,10 @@ def run(args):
         print("Please contact the developer if you want to use this.")
         opus_doc = OpusDocument(project)
         opus_doc.compile(args)
-
     start_time = time.time()
     timeout = False
     notice = False
+    updater.ready_to_update()
     while not updater.finish():
         if not timeout and time.time() - start_time > 3:
             print("Please wait while OPUS checking for new update...")
