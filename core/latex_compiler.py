@@ -71,8 +71,14 @@ class LatexCompiler:
         pdf_path = os.path.join(output_dir, pdf_file_name)
         if os.path.exists(pdf_file_name):
             os.remove(pdf_file_name)
-        if os.path.exists(pdf_path):
-            os.rename(pdf_path, pdf_file_name)
+        notice = False
+        while os.path.exists(pdf_path):
+            if os.access(pdf_path, os.W_OK):
+                os.rename(pdf_path, pdf_file_name)
+                break
+            elif not notice:
+                print("Please close the \"%s\" file..." % (pdf_file_name))
+                notice = True
         if not self.keep:
             print("Cleaning...")
             if os.path.exists(bbl_file_name):
