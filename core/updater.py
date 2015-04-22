@@ -67,6 +67,7 @@ class Updater(threading.Thread):
         zfile = zipfile.ZipFile(UPDATE_FILE, "r")
         test = zfile.testzip()
         if test is not None:
+            zfile.close()
             return
         top_dir = None
         for info in zfile.infolist():
@@ -79,6 +80,7 @@ class Updater(threading.Thread):
                 break
         if not self.has_new_update():
             self.failed = False
+            zfile.close()
             if os.path.exists(UPDATE_FILE):
                 os.remove(UPDATE_FILE)
             return
