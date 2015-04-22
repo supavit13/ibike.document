@@ -48,7 +48,10 @@ class Updater(threading.Thread):
             return False
 
     def has_new_update(self):
-        return self.version is not None and self.version != self.current_version
+        return (
+            self.version is not None and self.version != self.current_version or
+            self.version is not None and self.force_update
+        )
 
     def get_version(self):
         return self.version
@@ -82,8 +85,7 @@ class Updater(threading.Thread):
                 if m is not None:
                     self.version = m.group(1)
                 break
-        if (not self.force_update and not self.has_new_update() or
-                self.version is None):
+        if not self.has_new_update():
             self.failed = False
             zfile.close()
             if os.path.exists(UPDATE_FILE):
