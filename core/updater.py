@@ -17,8 +17,9 @@ UPDATE_FILE = "opus_update.zip"
 
 
 class Updater(threading.Thread):
-    def __init__(self, current_version):
+    def __init__(self, current_version, force_update=False):
         self.current_version = current_version
+        self.force_update = force_update
         self.version = None
         self.failed = True
         self.ready = False
@@ -81,7 +82,8 @@ class Updater(threading.Thread):
                 if m is not None:
                     self.version = m.group(1)
                 break
-        if not self.has_new_update():
+        if (not self.force_update and not self.has_new_update() or
+                self.version is None):
             self.failed = False
             zfile.close()
             if os.path.exists(UPDATE_FILE):

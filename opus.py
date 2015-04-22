@@ -19,7 +19,7 @@ import time
 from core import OpusHelp, OpusProject, OpusDocument, InstallValidator, Updater
 
 
-VERSION = "2.0.11"
+VERSION = "2.0.12"
 
 
 supported_ext = {
@@ -78,10 +78,10 @@ def run(args):
             args.remove(key)
             debug = True
             break
-    for key in ["--update", "-u"]:
+    for key in ["--update", "-u", "--force-update", "-fu"]:
         if key in args:
             args.remove(key)
-            updater = Updater(VERSION)
+            updater = Updater(VERSION, key in ["--force-update", "-fu"])
             updater.update()
             updater.ready_to_update()
             notice = False
