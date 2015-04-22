@@ -71,12 +71,12 @@ class LatexCompiler:
         pdf_path = os.path.join(output_dir, pdf_file_name)
         notice = False
         while os.path.exists(pdf_file_name):
-            if os.access(pdf_file_name, os.W_OK):
+            try:
                 os.remove(pdf_file_name)
-                break
-            elif not notice:
-                print("Please close the \"%s\" file..." % (pdf_file_name))
-                notice = True
+            except IOError:
+                if not notice:
+                    print("Please close the \"%s\" file..." % (pdf_file_name))
+                    notice = True
         if os.path.exists(pdf_path):
             os.rename(pdf_path, pdf_file_name)
         if not self.keep:
