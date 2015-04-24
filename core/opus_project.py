@@ -191,4 +191,6 @@ class OpusProject:
         project_info, tex_file, ref_file = self.parse_project(args)
         if not tex_file or not ref_file:
             return
-        LatexCompiler(project_info, tex_file, ref_file, keep).run(verbose)
+        compiler = LatexCompiler(project_info, tex_file, ref_file, keep)
+        compiler.run(verbose)
+        compiler.clean()

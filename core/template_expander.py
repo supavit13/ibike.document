@@ -109,6 +109,41 @@ class TemplateExpander:
                 return "%s" % (advisor[keyword_sel[0]])
             else:
                 return "%s, %s" % (advisor["name"], advisor["degree"])
+        elif keyword_name == "current_month" and keyword_sel:
+            current_month = datetime.now().month-1
+            abbr = 0
+            lang = keyword_sel[0]
+            keyword_sel = keyword_sel[1:]
+            if keyword_sel and keyword_sel[0] == "abbr":
+                keyword_sel = keyword_sel[1:]
+                abbr = 1
+            if lang == "en":
+                lower = False
+                if keyword_sel and keyword_sel[0] == "lower":
+                    keyword_sel = keyword_sel[1:]
+                    lower = True
+                month_name = [
+                    ["January", "Jan"], ["February", "Feb"], ["March", "Mar"],
+                    ["April", "Apr"], ["May", "May"], ["June", "Jun"],
+                    ["July", "Jul"], ["August", "Aug"], ["September", "Sep"],
+                    ["October", "Oct"], ["November", "Nov"], ["December", "Dec"]
+                ][current_month][abbr]
+                if lower:
+                    month_name = month_name.lower()
+                return month_name
+            elif lang == "th":
+                return [
+                    ["มกราคม", "ม.ค."], ["กุมภาพันธ์", "ก.พ."],
+                    ["มีนาคม", "มี.ค."], ["เมษายน", "เม.ย."],
+                    ["พฤษภาคม", "พ.ค."], ["มิถุนายน", "มิ.ย."],
+                    ["กรกฎาคม", "ก.ค."], ["สิงหาคม", "ส.ค."],
+                    ["กันยายน", "ก.ย."], ["ตุลาคม", "ต.ค."],
+                    ["พฤศจิกายน", "พ.ย."], ["ธันวาคม", "ธ.ค."]
+                ][current_month][abbr]
+            print("Warning! Keyword \"%s\" cannot required language" % (
+                keyword["matches"].group(0)
+            ))
+            return ""
         elif keyword_name == "authors" and keyword_sel:
             prefix = ""
             suffix = ""
@@ -147,17 +182,12 @@ class TemplateExpander:
             return ""
         non_string = [
             "name", "authors", "advisor",
-            "abstract", "chapters", "appendices"
+            "abstract", "chapters", "appendices",
+            "current_month"
         ]
         keyword_name = keyword["name"]
         if keyword_name[0] == "[" and keyword_name[-1] == "]":
             return keyword_name[1:-1]
-        elif keyword_name == "current_month":
-            return [
-                "มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน",
-                "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม",
-                "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
-            ][datetime.now().month-1]
         elif keyword_name in non_string:
             return self.parse_object(keyword)
         elif keyword_name == "reference":

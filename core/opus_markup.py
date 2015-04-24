@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os.path
+from datetime import datetime
 from .logger import Logger
 from .statements import Statements
 
@@ -69,6 +70,65 @@ class OpusMarkup:
             file_path, line_no,
             "InvalidMarkupKeyword",
             "Markup keyword \"%s\" cannot be parsed" % (
+                keyword["matches"].group(0)
+            )
+        )
+        return keyword["matches"].group(0)
+
+    def parse_special_keyword(self, keyword, line_no, file_path):
+        keyword_name = keyword["name"]
+        keyword_sel = None
+        if "selector" in keyword:
+            keyword_sel = keyword["selector"]
+        if keyword_name == "current_month" and keyword_sel:
+            current_month = datetime.now().month-1
+            abbr = 0
+            lang = keyword_sel[0]
+            keyword_sel = keyword_sel[1:]
+            if keyword_sel and keyword_sel[0] == "abbr":
+                keyword_sel = keyword_sel[1:]
+                abbr = 1
+            if lang == "en":
+                lower = False
+                if keyword_sel and keyword_sel[0] == "lower":
+                    keyword_sel = keyword_sel[1:]
+                    lower = True
+                month_name = [
+                    ["January", "Jan"], ["February", "Feb"], ["March", "Mar"],
+                    ["April", "Apr"], ["May", "May"], ["June", "Jun"],
+                    ["July", "Jul"], ["August", "Aug"], ["September", "Sep"],
+                    ["October", "Oct"], ["November", "Nov"], ["December", "Dec"]
+                ][current_month][abbr]
+                if lower:
+                    month_name = month_name.lower()
+                return month_name
+            elif lang == "th":
+                return [
+                    ["มกราคม", "ม.ค."], ["กุมภาพันธ์", "ก.พ."],
+                    ["มีนาคม", "มี.ค."], ["เมษายน", "เม.ย."],
+                    ["พฤษภาคม", "พ.ค."], ["มิถุนายน", "มิ.ย."],
+                    ["กรกฎาคม", "ก.ค."], ["สิงหาคม", "ส.ค."],
+                    ["กันยายน", "ก.ย."], ["ตุลาคม", "ต.ค."],
+                    ["พฤศจิกายน", "พ.ย."], ["ธันวาคม", "ธ.ค."]
+                ][current_month][abbr]
+            print("Warning! Markup \"%s\" cannot required language" % (
+                keyword["matches"].group(0)
+            ))
+            return ""
+        elif keyword_name == "current_file":
+            file_name = os.path.basename(file_path)
+            if keyword_sel and keyword_sel[0] == "escaped":
+                keyword_sel = keyword_sel[1:]
+                file_name = file_name.replace("_", "\\_")
+            if keyword_sel and keyword_sel[0] == "name":
+                return os.path.splitext(file_name)[0]
+            elif keyword_sel and keyword_sel[0] == "ext":
+                return os.path.splitext(file_name)[1][1:]
+            return file_name
+        Logger.warning(
+            file_path, line_no,
+            "InvalidMarkupKeyword",
+            "Markup special keyword \"%s\" cannot be parsed" % (
                 keyword["matches"].group(0)
             )
         )
@@ -341,6 +401,8 @@ class OpusMarkup:
                 return "\\end{Verbatim}"
         elif keyword and keyword["name"] in self.project:
             return self.parse_keyword(keyword, line_no, file_path)
+        elif keyword and keyword["name"] in ["current_month", "current_file"]:
+            return self.parse_special_keyword(keyword, line_no, file_path)
         Logger.warning(
             file_path, line_no,
             "InvalidMarkup",

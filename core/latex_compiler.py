@@ -10,14 +10,27 @@ class LatexCompiler:
         self.project = project
         self.tex_file = tex_file
         self.ref_file = ref_file
+        self.output_dir = "output"
+
+    def clean(self):
+        bbl_file_name = self.project["output_name"]+".bbl"
+        if not self.keep:
+            print("Cleaning...")
+            if os.path.exists(bbl_file_name):
+                os.remove(bbl_file_name)
+            if os.path.exists(self.output_dir):
+                shutil.rmtree(self.output_dir)
+            if os.path.exists(self.tex_file):
+                os.remove(self.tex_file)
+            if os.path.exists(self.ref_file):
+                os.remove(self.ref_file)
 
     def run(self, verbose=False):
-        output_dir = "output"
-        if not os.path.exists(output_dir):
-            os.mkdir(output_dir)
+        if not os.path.exists(self.output_dir):
+            os.mkdir(self.output_dir)
         xelatex_command = [
             "xelatex",
-            "-output-directory=%s" % (output_dir),
+            "-output-directory=%s" % (self.output_dir),
             "-interaction=nonstopmode",
             "-halt-on-error",
             "-no-pdf",
@@ -25,7 +38,7 @@ class LatexCompiler:
         ]
         bibtex_command = [
             "bibtex",
-            "%s/%s" % (output_dir, self.project["output_name"])
+            "%s/%s" % (self.output_dir, self.project["output_name"])
         ]
         print("Generating auxilary files...")
         if not CommandLine.run(
@@ -36,7 +49,7 @@ class LatexCompiler:
             print("Failed. Add \"--verbose\" flag to show error messages.")
             return
         bbl_file_name = self.project["output_name"]+".bbl"
-        bbl_file = os.path.join(output_dir, bbl_file_name)
+        bbl_file = os.path.join(self.output_dir, bbl_file_name)
         if self.project["expander"]["citations"]:
             print("Linking references...")
             if not CommandLine.run(
@@ -68,7 +81,7 @@ class LatexCompiler:
             print("Failed. Add \"--verbose\" flag to show error messages.")
             return
         pdf_file_name = self.project["output_name"]+".pdf"
-        pdf_path = os.path.join(output_dir, pdf_file_name)
+        pdf_path = os.path.join(self.output_dir, pdf_file_name)
         notice = False
         while os.path.exists(pdf_file_name):
             try:
@@ -79,13 +92,3 @@ class LatexCompiler:
                     notice = True
         if os.path.exists(pdf_path):
             os.rename(pdf_path, pdf_file_name)
-        if not self.keep:
-            print("Cleaning...")
-            if os.path.exists(bbl_file_name):
-                os.remove(bbl_file_name)
-            if os.path.exists(output_dir):
-                shutil.rmtree(output_dir)
-            if os.path.exists(self.tex_file):
-                os.remove(self.tex_file)
-            if os.path.exists(self.ref_file):
-                os.remove(self.ref_file)
