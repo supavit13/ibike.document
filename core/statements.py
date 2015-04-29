@@ -26,10 +26,11 @@ class Statements:
         },
         "escaped_character": {
             "pattern": [
-                "\\\\([-_])"
+                "\\\\([-])|(\\\\[_])"
             ],
             "matches": {
-                1: "character"
+                1: "character",
+                2: "return"
             }
         },
         "list_item": {

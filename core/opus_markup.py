@@ -137,6 +137,8 @@ class OpusMarkup:
     def parse_escaped(self, escaped, line_no, file_path):
         if "character" in escaped:
             return escaped["character"]
+        elif "return" in escaped:
+            return escaped["return"]
         Logger.warning(
             file_path, line_no,
             "InvalidEscaped",
