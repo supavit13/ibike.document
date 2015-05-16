@@ -74,7 +74,19 @@ class OpusProject:
         missing.sort()
         return missing
 
+    def parse_properties(self, prop):
+        properties = {}
+        if "supports" in prop:
+            for support in prop["supports"]:
+                comp = [c.strip() for c in support.split(":")]
+                if len(comp) > 1:
+                    properties[comp[0]] = comp[1]
+                else:
+                    properties[comp[0]] = True
+        return properties
+
     def set_property(self, project, prop):
+        properties = self.parse_properties(prop)
         if prop["name"] == "document":
             if "property" in prop:
                 project["output_name"] = prop["property"]
@@ -107,8 +119,14 @@ class OpusProject:
                 if lang not in project["advisor"]:
                     project["advisor"][lang] = {}
                 project["advisor"][lang]["name"] = prop["value"]
-                if "support_value" in prop:
-                    project["advisor"][lang]["degree"] = prop["support_value"]
+                if "degree" in properties:
+                    project["advisor"][lang]["degree"] = properties["degree"]
+                if "prefix" in properties:
+                    project["advisor"][lang]["prefix"] = properties["prefix"]
+                else:
+                    project["advisor"][lang]["prefix"] = (
+                        "อาจารย์" if lang == "th" else ""
+                    )
         elif prop["name"].startswith("author-"):
             if "authors" not in project:
                 project["authors"] = []
@@ -126,10 +144,17 @@ class OpusProject:
                         lang: prop["value"]
                     })
         else:
-            fields = [
-                "committee1", "committee2", "headdepartment",
-                "acknowledgement", "reference"
-            ]
+            professor_fields = ["committee1", "committee2", "headdepartment"]
+            fields = ["acknowledgement", "reference"]
+            for field in professor_fields:
+                if prop["name"].startswith(field):
+                    if field not in project:
+                        project[field] = {}
+                    project[field]["name"] = prop["value"]
+                    if "prefix" in properties:
+                        project[field]["prefix"] = properties["prefix"]
+                    else:
+                        project[field]["prefix"] = "อาจารย์"
             for field in fields:
                 if not prop["name"].startswith(field):
                     continue

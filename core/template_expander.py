@@ -106,9 +106,22 @@ class TemplateExpander:
             advisor = self.project["advisor"][keyword_sel[0]]
             keyword_sel = keyword_sel[1:]
             if keyword_sel:
-                return "%s" % (advisor[keyword_sel[0]])
+                if keyword_sel[0] == "name":
+                    return "%s%s" % (
+                        advisor["prefix"],
+                        advisor["name"]
+                    )
+                else:
+                    return "%s" % (advisor[keyword_sel[0]])
             else:
-                return "%s, %s" % (advisor["name"], advisor["degree"])
+                return "%s%s, %s" % (
+                    advisor["prefix"],
+                    advisor["name"],
+                    advisor["degree"]
+                )
+        elif keyword_name in ["committee1", "committee2", "headdepartment"]:
+            professor = self.project[keyword_name]
+            return "%s%s" % (professor["prefix"], professor["name"])
         elif keyword_name == "current_month" and keyword_sel:
             current_month = datetime.now().month-1
             abbr = 0
@@ -183,7 +196,8 @@ class TemplateExpander:
         non_string = [
             "name", "authors", "advisor",
             "abstract", "chapters", "appendices",
-            "current_month"
+            "current_month", "committee1", "committee2",
+            "headdepartment"
         ]
         keyword_name = keyword["name"]
         if keyword_name[0] == "[" and keyword_name[-1] == "]":

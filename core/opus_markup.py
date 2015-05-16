@@ -46,11 +46,22 @@ class OpusMarkup:
             advisor = self.project["advisor"][keyword_sel[0]]
             keyword_sel = keyword_sel[1:]
             if keyword_sel:
-                return "%s" % (advisor[keyword_sel[0]])
+                if keyword_sel[0] == "name":
+                    return "%s%s" % (
+                        advisor["prefix"],
+                        advisor["name"]
+                    )
+                else:
+                    return "%s" % (advisor[keyword_sel[0]])
             else:
-                return "%s, %s" % (advisor["name"], advisor["degree"])
+                return "%s%s, %s" % (
+                    advisor["prefix"],
+                    advisor["name"],
+                    advisor["degree"]
+                )
         elif keyword_name in ["committee1", "committee2", "headdepartment"]:
-            return self.project[keyword_name]
+            professor = self.project[keyword_name]
+            return "%s%s" % (professor["prefix"], professor["name"])
         elif keyword_name == "authors" and keyword_sel:
             prefix = ""
             suffix = ""

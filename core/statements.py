@@ -90,24 +90,20 @@ class Statements:
         "property": {
             "pattern": [
                 "([^\\s\\n():\\|%]+)(\\(([^():\\|]+)\\))?:([^\\n():\\|%]+)" +
-                "(\\|([^\\n():\\|%]+)(\\(([^():\\|]+)\\))?:([^\\n():\\|%]+))?",
+                "(\\s*\\|\\s*(([^\\:\\n]+)\\s*\\:\\s*([^\\n]+)))?",
                 re.I
             ],
             "options": {
                 1: {"trim": True, "lower": True},
                 3: {"trim": True},
                 4: {"trim": True},
-                6: {"trim": True, "lower": True},
-                8: {"trim": True},
-                9: {"trim": True}
+                6: {"trim": True, "split": "|"}
             },
             "matches": {
                 1: "name",
                 3: "property",
                 4: "value",
-                6: "support_name",
-                8: "support_property",
-                9: "support_value",
+                6: "supports"
             }
         },
         "property_end": {
