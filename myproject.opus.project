@@ -16,11 +16,11 @@ document(myreport): report
 	author-en: Sirisak Lueangsaksri
 
 	% Advisor (both Thai and English)
-	advisor-th: ปุณณะ ยศปัญญา | degree: วศ.บ.	   % Advisor must have a degree
-	advisor-en: Poonna Yospanya | degree: B.Eng.
+	advisor-th: ปุณณะ ยศปัญญา | degree: วท.ม.	   % Advisor must have a degree
+	advisor-en: Poonna Yospanya | degree: M.Sc.
 
 	% Name of 1st and 2nd Committee (based on output language)
-	committee1-th: อนันต์ บรรหารสกุล
+	committee1-th: อนันต์ บรรหารสกุล    % | prefix: อ.ดร. % Custom prefix
 	committee2-th: เกื้อกูล กุมรัมย์
 
 	% Name of head of department
