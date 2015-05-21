@@ -113,6 +113,11 @@ class TemplateExpander:
                     )
                 else:
                     return "%s" % (advisor[keyword_sel[0]])
+            elif "degree" not in advisor:
+                return "%s%s" % (
+                    advisor["prefix"],
+                    advisor["name"]
+                )
             else:
                 return "%s%s, %s" % (
                     advisor["prefix"],

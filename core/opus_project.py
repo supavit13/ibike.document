@@ -62,10 +62,13 @@ class OpusProject:
                             "Project Advisor must have %s name" % (language)
                         )
                         continue
-                    if len(project["advisor"][lang]) < 2:
+                    if "name" not in project["advisor"][lang] or (
+                        "degree" not in project["advisor"][lang] and
+                        "prefix" not in project["advisor"][lang]
+                    ):
                         missing.append(
                             "Project Advisor must have" +
-                            " both name and degree in %s" % (language)
+                            " name and degree or prefix in %s" % (language)
                         )
             if len(properties["abstract"]) < 2:
                 missing.append(
