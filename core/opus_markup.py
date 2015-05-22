@@ -373,7 +373,9 @@ class OpusMarkup:
                 "reference": "",
                 "format": "",
                 "caption": "",
-                "float": ""
+                "float": "",
+                "size": "",
+                "unit": "pt"
             }
 
             if "format" in markup:
@@ -384,15 +386,26 @@ class OpusMarkup:
                 settings["caption"] = markup["value"]
             if "float" in attrs:
                 settings["float"] = attrs["float"]
+            if "size" in attrs:
+                settings["size"] = attrs["size"]
+            if "unit" in attrs:
+                settings["unit"] = attrs["unit"]
 
             output = ""
             if settings["caption"] != "":
                 self.project["expander"]["tables"] = True
                 self.inside.append("table_labeled")
+                caption = settings["caption"]
+                if settings["size"] != "":
+                    caption = "\\fontsize{%s%s}{16pt}\\selectfont %s" % (
+                        settings["size"],
+                        settings["unit"],
+                        settings["caption"]
+                    )
                 output += "\\begin{table}%s\n\\centering\n\\caption{%s}\n" % (
                     "[%s]" % (settings["float"])
                     if settings["float"] != "" else "",
-                    settings["caption"]
+                    caption
                 )
             else:
                 self.inside.append("table")
