@@ -325,6 +325,34 @@ class OpusMarkup:
         elif markup["tag"] == "code":
             settings = {
                 "frame": True,
+                "language": ""
+            }
+
+            options = []
+
+            if "value" in markup:
+                settings["language"] = markup["value"]
+            if "frame" in attrs:
+                if attrs["frame"].lower() in ["true", "false"]:
+                    settings["frame"] = bool(attrs["frame"].lower())
+                else:
+                    Logger.warning(
+                        file_path, line_no,
+                        "InvalidAttribute",
+                        "Attribute \"frame\" must be" +
+                        " either \"true\" or \"false\""
+                    )
+
+            self.inside.append(markup["tag"])
+            if settings["frame"]:
+                options.append("frame=single")
+            if settings["language"]:
+                options.append("language=%s" % (settings["language"]))
+
+            return "\\begin{lstlisting}[%s]" % (",".join(options))
+        elif markup["tag"] == "mathcode":
+            settings = {
+                "frame": True,
                 "math": False
             }
 
@@ -429,6 +457,8 @@ class OpusMarkup:
             elif ending_type == "math":
                 return "\\]"
             elif ending_type == "code":
+                return "\\end{lstlisting}"
+            elif ending_type == "mathcode":
                 return "\\end{Verbatim}"
         elif keyword and keyword["name"] in self.project:
             return self.parse_keyword(keyword, line_no, file_path)
