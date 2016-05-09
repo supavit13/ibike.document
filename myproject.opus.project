@@ -1,5 +1,5 @@
 % document(<output name>): [proposal, report]
-document(myreport): report
+document(myprop): proposal
 	% Output language: [en, th]
 	language: th
 
