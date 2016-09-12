@@ -26,6 +26,9 @@ document(myprop): proposal
 	% Name of head of department
 	headdepartment-th: วัชรพัฐ เมตตานันท
 
+	% Proposal Content
+	proposal: proposal.opus
+
 	% Thai language abstract
 	abstract-th: abstract_th.opus
 

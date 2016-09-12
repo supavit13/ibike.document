@@ -241,6 +241,8 @@ class TemplateExpander:
             include_path = self.project["abstract"][template["selector"][0]]
         elif template_name == "acknowledgement":
             include_path = self.project["acknowledgement"]
+        elif template_name == "proposal":
+            include_path = self.project["proposal"]
         elif template_name in ["chapter", "appendix"]:
             include_path = template["file"]
         elif template_name in ["listoftables", "listoffigures"]:

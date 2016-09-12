@@ -11,7 +11,7 @@
 #    Vacharapat Mettanant (v1.0.0 2013)
 #    Sirisak Lueangsaksri (v2.0.0 2015)
 # Maintainance by
-#    Sirisak Lueangsaksri (2014-2015)
+#    Sirisak Lueangsaksri (2014-2016)
 
 import sys
 import os
@@ -19,7 +19,7 @@ import time
 from core import OpusHelp, OpusProject, OpusDocument, InstallValidator, Updater
 
 
-VERSION = "2.2.4"
+VERSION = "2.3.0"
 
 
 supported_ext = {
@@ -91,7 +91,9 @@ def run(args):
                     print("Updating OPUS to v%s..." % (updater.get_version()))
                     notice = True
             if updater.is_failed():
-                print("OPUS update is failed. Process will try again next time.")
+                print(
+                    "OPUS update is failed. Process will try again next time."
+                )
             return
     projects = []
     files = os.listdir(".")

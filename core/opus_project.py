@@ -23,6 +23,7 @@ class OpusProject:
             "headdepartment": "Head of Department",
             "abstract": "Abstract (TH & EN)",
             "acknowledgement": "Acknowledgement",
+            "proposal": "Proposal Content",
             "reference": "Reference",
             "chapters": "Project Contents (Chapters)"
         }
@@ -148,7 +149,7 @@ class OpusProject:
                     })
         else:
             professor_fields = ["committee1", "committee2", "headdepartment"]
-            fields = ["acknowledgement", "reference"]
+            fields = ["acknowledgement", "proposal", "reference"]
             for field in professor_fields:
                 if prop["name"].startswith(field):
                     if field not in project:
