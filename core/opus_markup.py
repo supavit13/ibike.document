@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 import os.path
 from datetime import datetime
 from .logger import Logger
@@ -480,6 +481,9 @@ class OpusMarkup:
         )
         if line.replace(" ", "").replace("\t", "") == "":
             return ""
+        match = re.search("\\$[^$]+\\$", line)
+        if match:
+            return match.group(0) 
         line = Statements.parse(
             "basic_style",
             line,

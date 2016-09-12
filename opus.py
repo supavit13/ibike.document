@@ -19,7 +19,7 @@ import time
 from core import OpusHelp, OpusProject, OpusDocument, InstallValidator, Updater
 
 
-VERSION = "2.2.3"
+VERSION = "2.2.4"
 
 
 supported_ext = {
