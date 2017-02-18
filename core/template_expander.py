@@ -195,8 +195,9 @@ class TemplateExpander:
         return keyword["matches"].group(0)
 
     def parse_keyword(self, keyword):
-        if ("type" in keyword
-                and self.project["output_type"] != keyword["type"]):
+        if (
+            "type" in keyword and self.project["output_type"] != keyword["type"]
+        ):
             return ""
         non_string = [
             "name", "authors", "advisor",

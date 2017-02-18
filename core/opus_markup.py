@@ -114,7 +114,8 @@ class OpusMarkup:
                     ["January", "Jan"], ["February", "Feb"], ["March", "Mar"],
                     ["April", "Apr"], ["May", "May"], ["June", "Jun"],
                     ["July", "Jul"], ["August", "Aug"], ["September", "Sep"],
-                    ["October", "Oct"], ["November", "Nov"], ["December", "Dec"]
+                    ["October", "Oct"], ["November", "Nov"],
+                    ["December", "Dec"]
                 ][current_month][abbr]
                 if lower:
                     month_name = month_name.lower()
@@ -229,7 +230,9 @@ class OpusMarkup:
         keyword = Statements.parse("markup_keyword", markup["tag"])
         inside = None if len(self.inside) == 0 else self.inside[-1]
 
-        if not inside and markup["tag"] in ["section", "subsection", "subsubsection"]:
+        if not inside and markup["tag"] in [
+            "section", "subsection", "subsubsection"
+        ]:
             settings = {
                 "caption": "",
                 "reference": ""
@@ -402,7 +405,7 @@ class OpusMarkup:
                 "reference": "",
                 "format": "",
                 "caption": "",
-                "float": "",
+                "float": "h",
                 "size": "",
                 "unit": "pt"
             }
@@ -481,9 +484,9 @@ class OpusMarkup:
         )
         if line.replace(" ", "").replace("\t", "") == "":
             return ""
-        match = re.search("\\$[^$]+\\$", line)
+        match = re.search("^\\$[^$]+\\$$", line)
         if match:
-            return match.group(0) 
+            return match.group(0)
         line = Statements.parse(
             "basic_style",
             line,
@@ -499,7 +502,9 @@ class OpusMarkup:
                 line = Statements.parse(
                     "list_item",
                     line,
-                    replacer=lambda m: self.parse_list_item(m, line_no, file_path)
+                    replacer=lambda m: self.parse_list_item(
+                        m, line_no, file_path
+                    )
                 )
             else:
                 Logger.warning(

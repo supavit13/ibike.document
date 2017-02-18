@@ -11,7 +11,7 @@
 #    Vacharapat Mettanant (v1.0.0 2013)
 #    Sirisak Lueangsaksri (v2.0.0 2015)
 # Maintainance by
-#    Sirisak Lueangsaksri (2014-2016)
+#    Sirisak Lueangsaksri (2014-2017)
 
 import sys
 import os
@@ -19,7 +19,7 @@ import time
 from core import OpusHelp, OpusProject, OpusDocument, InstallValidator, Updater
 
 
-VERSION = "2.3.0"
+VERSION = "2.3.1"
 
 
 supported_ext = {
