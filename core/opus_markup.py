@@ -353,7 +353,10 @@ class OpusMarkup:
             if settings["language"]:
                 options.append("language=%s" % (settings["language"]))
 
-            return "\\begin{lstlisting}[%s]" % (",".join(options))
+            return (
+                "\\lstset{basicstyle=\\footnotesize\\ttfamily," +
+                "breaklines=true}\\begin{lstlisting}[%s]" % (",".join(options))
+            )
         elif markup["tag"] == "mathcode":
             settings = {
                 "frame": True,
