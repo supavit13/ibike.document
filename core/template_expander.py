@@ -41,7 +41,11 @@ class TemplateExpander:
         self.ref_file = open(self.ref_file_name, "w", encoding="utf8")
 
     def encode_thai(self, string):
-        return re.sub("([^\\x00-\\xff]+)", "{\\\\thi \\1}", string)
+        def replacer(matches):
+            if matches.group(1):
+                return matches.group(2)
+            return "{\\thi %s}" % (matches.group(2))
+        return re.sub("(\\\\)?([^\\x00-\\xff]+)", replacer, string)
 
     def parse_chapter_keyword(self, chapter, keyword):
         if keyword["name"] in ["chapter_name", "appendix_name"]:
@@ -275,9 +279,11 @@ class TemplateExpander:
         return "".join(output)
 
     def parse_template(self, template, templates):
-        if ("type" in template
-                and self.project["output_type"] != template["type"]
-                and self.project["output_language"] != template["type"]):
+        if (
+            "type" in template and
+            self.project["output_type"] != template["type"] and
+            self.project["output_language"] != template["type"]
+        ):
             return ""
         if template["name"][0] == "[" and template["name"][-1] == "]":
             return self.parse_include(template["name"][1:-1], template)
@@ -321,9 +327,11 @@ class TemplateExpander:
             return True
 
     def parse_post_template(self, template):
-        if ("type" in template
-                and self.project["output_type"] != template["type"]
-                and self.project["output_language"] != template["type"]):
+        if (
+            "type" in template and
+            self.project["output_type"] != template["type"] and
+            self.project["output_language"] != template["type"]
+        ):
             return ""
         if template["name"][0] == "[" and template["name"][-1] == "]":
             template_name = template["name"][1:-1]

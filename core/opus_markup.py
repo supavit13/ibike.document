@@ -329,10 +329,11 @@ class OpusMarkup:
         elif markup["tag"] == "code":
             settings = {
                 "frame": True,
-                "language": ""
+                "language": "",
+                "number": False
             }
 
-            options = []
+            options = ["inputencoding=utf8"]
 
             if "value" in markup:
                 settings["language"] = markup["value"]
@@ -346,10 +347,22 @@ class OpusMarkup:
                         "Attribute \"frame\" must be" +
                         " either \"true\" or \"false\""
                     )
+            if "number" in attrs:
+                if attrs["number"].lower() in ["true", "false"]:
+                    settings["number"] = bool(attrs["number"].lower())
+                else:
+                    Logger.warning(
+                        file_path, line_no,
+                        "InvalidAttribute",
+                        "Attribute \"number\" must be" +
+                        " either \"true\" or \"false\""
+                    )
 
             self.inside.append(markup["tag"])
             if settings["frame"]:
                 options.append("frame=single")
+            if settings["number"]:
+                options.append("numbers=left")
             if settings["language"]:
                 options.append("language=%s" % (settings["language"]))
 
@@ -363,7 +376,7 @@ class OpusMarkup:
                 "math": False
             }
 
-            options = ["fontfamily=tt"]
+            options = []
 
             if "math" in attrs:
                 if attrs["math"].lower() in ["true", "false"]:
