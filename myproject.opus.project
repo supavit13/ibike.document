@@ -1,30 +1,35 @@
 % document(<output name>): [proposal, report]
-document(myprop): proposal
+document(myprop): report
 	% Output language: [en, th]
 	language: th
 
 	% Project name
-	name-th: ระบบการเรียงพิมพ์สำหรับเอกสารการศึกษา
-	name-en: A Typesetting System for Academic Documents
+	name-th: ระบบจัดการเช่าและตรวจสอบสภาพรถจักรยานยนต์ผ่านระบบประมวลผลแบบกลุ่มเมฆ
+	name-en: Cloud-based Motorcycle Rental Management and Inspection System
 
 	% Author names
-	author-th: วัชรพัฐ เมตตานันท
-	author-en: Vacharapat Mettanant
+	author-th: ตนุภัทร บุญรักษา
+	author-en: Tanupat Boonruksa
+
+	author-th: ศุภวิชญ์ นวลขาว
+	author-en: Supavit Nounkhaow
 
 	% If more than one author, add more.
-	author-th: สิริศักดิ์ เหลืองศักดิ์ศรี
-	author-en: Sirisak Lueangsaksri
+	author-th: สฤษดิ์วงศ์ หวานเสนาะ
+	author-en: Salidwong Wansanoh
 
 	% Advisor (both Thai and English)
-	advisor-th: ปุณณะ ยศปัญญา | degree: วท.ม.	   % Advisor must have a degree
-	advisor-en: Poonna Yospanya | degree: M.Sc.
+	advisor-th: ณัฏฐ์ อรุณ | degree:    % Advisor must have a degree
+	advisor-en: Nut Aroon | degree: 
+	%advisor-th: ณัฏฐ์ อรุณ | degree: วท.ม.	   % Advisor must have a degree
+	%advisor-en: Nut Aroon | degree: M.Sc.
 
 	% Name of 1st and 2nd Committee (based on output language)
-	committee1-th: อนันต์ บรรหารสกุล    % | prefix: อ.ดร. % Custom prefix
-	committee2-th: เกื้อกูล กุมรัมย์
+	committee1-th: จิรวัฒน์ จิตประสูตรวิทย์    % | prefix:  % Custom prefix
+	committee2-th: วัชรพัฐ เมตตานันท
 
 	% Name of head of department
-	headdepartment-th: วัชรพัฐ เมตตานันท
+	headdepartment-th: ประวิทย์ ชุมชู
 
 	% Proposal Content
 	proposal: proposal.opus
@@ -41,15 +46,15 @@ document(myprop): proposal
 	% Contents. Separated by each chapter.
 	% chapter(<chapter title>): <file to the chapter>
 	chapter(บทนำ): ch1_introduction.opus
-	chapter(ความรู้พื้นฐานและงานที่เกี่ยวข้อง): ch2_related_work.opus
-	chapter(การพัฒนา): ch3_implementations.opus
+	chapter(ความรู้พื้นฐานและงานวิจัยที่เกี่ยวข้อง): ch2_related_work.opus
+	chapter(อุปกรณ์และวิธีการ): ch3_implementations.opus
 	chapter(ผลและวิจารณ์): ch4_results_and_discussion.opus
-	chapter(สรุป): ch5_conclusion.opus
+	chapter(สรุปและข้อเสนอแนะ): ch5_conclusion.opus
 
 	% References file
 	reference: references.bib
 
 	% Appendices. Separated by each appendix.
 	% appendix(<appendix title>): <file to the appendix>
-	% appendix(คู่มือการติดตั้งโปรแกรม): appendixA.opus
-	% appendix(คู่มือการใช้งานโปรแกรม): appendixB.opus
+	appendix(คู่มือการติดตั้งโปรแกรม): appendixA.opus
+	appendix(คู่มือการใช้งานโปรแกรม): appendixB.opus
