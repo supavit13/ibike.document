@@ -1,2 +1,86 @@
-[[image(customer):customer.png|width=0.7|caption=Flowchart แสดงขั้นตอนการใช้งานของผู้ใช้บริการ]]
-[[image(owner):owner.png|width=0.7|caption=Flowchart แสดงขั้นตอนการใช้งานของผู้ให้เช่า]]
+%[[image(customer):customer.png|width=0.7|caption=Flowchart แสดงขั้นตอนการใช้งานของผู้ใช้บริการ]]
+%[[image(owner):owner.png|width=0.7|caption=Flowchart แสดงขั้นตอนการใช้งานของผู้ให้เช่า]]
+[[section : การติดตั้งระบบ]]
+[[subsection : ส่วนของอุปกรณ์]]
+นำชุดอุปกรณ์ไปไว้บริเวณที่ต้องการติดตั้ง จากนั้นทำการเดินสายจากขั้วต่างๆมาเพื่อทำการต่อเข้ากับชุดอุปกรณ์
+
+สายขั้วบวกของ USB type-A [[ref(usb1)]] ต่อเข้ากับช่องเสียบขั้วบวกขาออกของวงจรแปลงแรง ขั้วลบของสาย USB ต่อเข้ากับช่องเสียบขั้วบวกขาออกของวงจรแปลงแรงดัน
+[[image(usb1):usb1.jpg|width=0.6|caption=สายขั้วกุญแจ]]
+\newpage
+
+สายขั้วกุญแจดังภาพที่ [[ref(mkey1)]] ต่อกับช่องเสียบ Relay ตัวที่ 1 ดังภาพที่ [[ref(mkey2)]] เพื่อให้ขั้วกุญแจสามารถสั่งการผ่านอุปกรณ์ได้
+[[image(mkey1):mkey1.jpg|width=1.1|caption=สายขั้วกุญแจ]]
+[[image(mkey2):mkey2.jpg|width=1.1|caption=ช่องเสียบสายขั้วกุญแจ]]
+\newpage
+
+สายขั้วตรวจสอบ DLC ดังภาพที่ [[ref(mDLC1)]] ต่อกับช่องเสียบ Relay ตัวที่ 2 ดังภาพที่ [[ref(mDLC2)]]
+[[image(mDLC1):mDLC1.jpg|width=1.1|caption=สายขั้วตรวจสอบ DLC]]
+[[image(mDLC2):mDLC2.jpg|width=1.1|caption=ช่องเสียบ Relay ตัวที่ 2]]
+\newpage
+
+สายขั้วเบรคต่อเข้า ดังภาพที่ [[ref(mbreak1)]] กับช่องเสียบ Relay ตัวที่ 3 ดังภาพที่ [[ref(mbreak2)]]
+[[image(mbreak1):mbreak1.jpg|width=1.1|caption=สายขั้วเบรก]]
+[[image(mbreak2):mbreak2.jpg|width=1.1|caption=ช่องเสียบ Relay ตัวที่ 3]]
+\newpage
+
+สายขั้วแตร ดังภาพที่ [[ref(mhorn1)]] ต่อกับช่องเสียบ Relay ตัวที่ 4 ดังภาพที่ [[ref(mhorn2)]]
+[[image(mhorn1):mhorn1.jpg|width=1.1|caption=สายขั้วแตร]]
+[[image(mhorn2):mhorn2.jpg|width=1.1|caption=ช่องเสียบ Relay ตัวที่ 4]]
+\newpage
+
+สายขั้ว MIL ดังภาพที่ [[ref(MIL1)]] ต่อขั้วบวกเข้ากับขั้วบวกของช่องเสียบ MIL ขั้วลบต่อเข้ากับช่องเสียบขั้วลบของ MIL ดังภาพที่ [[ref(MIL2)]]
+[[image(MIL1):MIL1.jpg|width=1.1|caption=สายขั้ว MIL]]
+[[image(MIL2):MIL2.jpg|width=1.1|caption=ช่องเสียบสาย MIL]]
+\newpage
+
+สายขั้วบวกของแบตเตอรี่รถ ดังภาพที่ [[ref(mbat1)]] ต่อเข้ากับช่องบวกของวงจรแปลงแรงดัน ขั้วลบของแบตต่อเข้ากับขั้วลบของวงจรแปลงแรงดัน ดังภาพที่ [[ref(mbat2)]]
+[[image(mbat1):mbat1.jpg|width=1.1|caption=สายขั้วแบตเตอรี่]]
+[[image(mbat2):mbat2.jpg|width=1.1|caption=ช่องเสียบขั้วแบบเตอรี่]]
+\newpage
+
+เสียบสาย USB เข้ากับบอร์ดควบคุม ดังภาพที่ [[ref(fullinstall)]] หลังจากนั้นจะมีสัญญาณไฟที่บอร์ดควบคุมกระพริบเป็นสีเขียวหมายความว่า บอร์ดควบคุมกำลังติดต่อกับอินเตอร์เน็ต เมื่อผ่านไปสักพักสัญญาณไฟจะเป็นสีฟ้าอ่อนแสดงว่าบอร์ดเชื่อมต่อกับอินเตอร์เน็ตขั้นตอนการติดตั้งเสร็จสมบูรณ์
+[[image(fullinstall):fullinstall.jpg|width=0.8|caption=บอร์ดควบคุม]]
+\newpage
+
+
+[[subsection : ส่วนของการสื่อสารระหว่างซอฟแวร์และฮาร์ดแวร์โดย NETPIE]]
+
+สมัครสมาชิกเริ่มต้นใช้งาน NEPIE ดังภาพที่ [[ref(inetpieregis)]]
+[[image(inetpieregis):inetpieregis.jpg|width=0.7|caption=หน้าสมัครสมาชิกของ NEPIE]]
+
+ทำการสร้าง Application เพื่อใช้ในการสื่อสารระหว่างเว็บกับอุปกรณ์ ดังภาพที่ [[ref(icreateapp)]]
+[[image(icreateapp):icreateapp.png|width=0.7|caption=หน้าการสร้าง Application ของ NEPIE]]
+\newpage
+
+ทำการสร้าง Application key ขึ้นมา สำหรับอุปกรณ์และเว็บ ดังภาพที่ [[ref(icreateapp)]]
+[[image(icreateappkey):icreateappkey.png|width=0.7|caption=หน้าการสร้าง Application key ของ NEPIE]]
+[[ulist]]
+# ส่วนของอุปกรณ์ให้ตั้งชื่อและเลือกประเภทเป็น Device Key 
+# ส่วนของเว็บให้ตั้งชื่อและเลือกประเภทเป็น Session Key
+[[end]]
+\newpage
+
+[[subsection : ส่วนของซอฟแวร์]]
+
+[[subsubsection : ส่วนของการกำหนดค่าในโค้ดที่อยู่ในเว็บ]]
+
+ทำการเพิ่มรถเข้าไปในระบบเพื่อให้ได้หมายเลขของรถตามรูปที่ [[ref(iaddbike)]]
+[[image(iaddbike):tmotolist.png|width=0.7|caption=หน้ารายการรถจักรยานยนต์]]
+
+เมื่อสร้าง Session key สำหรับเว็บ จะได้ KEY และ SECRET ดังภาพที่ [[ref(inetpiekey)]]
+[[image(inetpiekey):inetpiekey.jpg|width=0.7|caption=แสดงข้อมูล Session key ที่สร้างขึ้น]]
+\newpage
+
+กำหนด APPID ,KEY และSECRET ในโค้ดตามภาพที่ [[ref(ibikestatus)]] และ [[ref(inetpiescript)]] ให้ตรงกับภาพที่ [[ref(inetpiekey)]]
+[[image(ibikestatus):ibikestatus.png|width=0.7|caption=Code หน้าการแสดงสถานะตัวรถ]]
+[[image(inetpiescript):inetpiescript.png|width=0.7|caption=Code หน้าการทำงานที่ใช้ติดต่อกับ NETPIE]]
+\newpage
+
+[[subsubsection : ส่วนการกำหนดค่าในโค้ดของ particle electron]]
+
+เมื่อสร้าง Device key สำหรับอุปกรณ์ จะได้ KEY และ SECRET ดังภาพที่ [[ref(idevicekey)]]
+[[image(idevicekey):idevicekey.jpg|width=0.7|caption=แสดงข้อมูล Device key ที่สร้างขึ้น]]
+
+กำหนด APPID, KEY, SECRET, ALIAS(ชื่อของอุปกรณ์) และmorcycid(หมายเลขของรถ)ในโค้ดตามภาพที่ [[ref(codeinit)]] ให้ตรงกับภาพที่ [[ref(idevicekey)]]
+[[image(codeinit):codeinit.png|width=0.7|caption=แสดงข้อมูล Device key ที่สร้างขึ้น]]
+\newpage
