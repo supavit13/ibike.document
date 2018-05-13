@@ -19,17 +19,17 @@ document(myprop): report
 	author-en: Salidwong Wansanoh
 
 	% Advisor (both Thai and English)
-	advisor-th: ณัฏฐ์ อรุณ | degree:    % Advisor must have a degree
-	advisor-en: Nut Aroon | degree: 
+	advisor-th: ณัฏฐ์ อรุณ | degree: วท.ม.   % Advisor must have a degree
+	advisor-en: Nut Aroon | degree: M.Sc.
 	%advisor-th: ณัฏฐ์ อรุณ | degree: วท.ม.	   % Advisor must have a degree
 	%advisor-en: Nut Aroon | degree: M.Sc.
 
 	% Name of 1st and 2nd Committee (based on output language)
-	committee1-th: จิรวัฒน์ จิตประสูตรวิทย์    % | prefix:  % Custom prefix
+	committee1-th: จิรวัฒน์ จิตประสูตวิทย์    % | prefix:  % Custom prefix
 	committee2-th: วัชรพัฐ เมตตานันท
 
 	% Name of head of department
-	headdepartment-th: ประวิทย์ ชุมชู
+	headdepartment-th: ประวิทย์ ชุมชู | prefix: ผศ.ดร. % Custom prefix
 
 	% Proposal Content
 	proposal: proposal.opus
