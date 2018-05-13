@@ -74,7 +74,10 @@
 กำหนด APPID ,KEY และSECRET ในโค้ดตามภาพที่ [[ref(ibikestatus)]] และ [[ref(inetpiescript)]] ให้ตรงกับภาพที่ [[ref(inetpiekey)]]
 [[image(ibikestatus):ibikestatus.png|width=0.7|caption=Code หน้าการแสดงสถานะตัวรถ]]
 [[image(inetpiescript):inetpiescript.png|width=0.7|caption=Code หน้าการทำงานที่ใช้ติดต่อกับ NETPIE]]
+
+วิธีการรัน Web app สามารถทำได้ตามนี้ \url{https://github.com/supavit13/ibike}
 \newpage
+
 
 [[subsubsection : ส่วนการกำหนดค่าในโค้ดของ particle electron]]
 
@@ -83,4 +86,6 @@
 
 กำหนด APPID, KEY, SECRET, ALIAS(ชื่อของอุปกรณ์) และmorcycid(หมายเลขของรถ)ในโค้ดตามภาพที่ [[ref(codeinit)]] ให้ตรงกับภาพที่ [[ref(idevicekey)]]
 [[image(codeinit):codeinit.png|width=0.7|caption=แสดงข้อมูล Device key ที่สร้างขึ้น]]
+
+ขั้นตอนและวิธีการอัพโหลด firmware สามารถทำได้ตามนี้ \url{https://github.com/supavit13/Electron_CMRM}
 \newpage
